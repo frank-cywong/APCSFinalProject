@@ -14,6 +14,8 @@ To check which branch you are on, you can do `git status`.
 
 Committing, pushing, and pulling from remote will work the same when you're on a branch.
 
+To update your branch with content from main, make sure you are on the correct branch, then do `git merge main`.
+
 When you are ready to merge your branch to main, do `git checkout main`, and then do `git merge [branch_name]`.
 
 In case there is a merge conflict, you may fix it by opening the files concerned and looking for the conflict markers, fixing it manually, then committing it.
