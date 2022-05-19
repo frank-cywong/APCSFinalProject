@@ -4,7 +4,7 @@ Final project for APCS MKS22X course at Stuyvesant High School
 ## Guide to Branching & Merging
 To avoid pushing non-functional code to main and to reduce the number of merge operations that need to be performed while maintaining regular commits, **DO NOT** push directly to main.
 
-A branch has been created called `frank-branch` and `ntarsis-branch` respectively. You should do your work on your individual branch, then merge it to master only when give-or-take a feature has been mostly finished.
+Branches have been created for each person called `frank-branch` and `ntarsis-branch` respectively. You should do your work on your individual branch, then merge it to master only when give-or-take a feature has been mostly finished.
 
 This does not preclude you from committing regularly and you should still do that.
 
