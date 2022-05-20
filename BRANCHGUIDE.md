@@ -20,3 +20,5 @@ In case there is a merge conflict, you may fix it by opening the files concerned
 In case you are having trouble on fixing it, you may do `git merge --abort` to stop the merge and then ask for help after that.
 
 Other helpful commands that you should look at include `git branch`, `git reset`, and `git rebase`.
+
+Also Mr. K made [instructions on branching](https://konstantinnovation.github.io/apcs.html#2022-05-20n) as well.
