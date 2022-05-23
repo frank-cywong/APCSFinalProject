@@ -2,17 +2,20 @@ public class Board {
   Block curBlock;
   int topLeftX = 0;
   int topLeftY = 0;
-  final int gravityRate = 30; // one down move every 30 frames
+  int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
   static final int statZoneWidth = 160;
   int boardWidth = 10;
   int boardHeight = 20;
+  int[] controls = new int[CONTROLS_COUNT];
   Tile[][] tiles;
   public Board() {
     curBlock = new Block(this);
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
+    // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
+    controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
   }
   void render() {
     // for now temp, just draw the block
@@ -40,5 +43,27 @@ public class Board {
   }
   int[] boardCoordsToCoords(int col, int row) {
     return(new int[] {col * TILE_SIZE + topLeftX + gameplayXOffset, (boardHeight - row - 1) * TILE_SIZE + topLeftY + gameplayYOffset});
+  }
+  void onKeyPressed(int keyCode){
+    // temp controls:
+    if(keyCode == UP){
+      gravityRate /= 2;
+      if(gravityRate < 1){
+        gravityRate = 1;
+      }
+      return;
+    }
+    if(keyCode == DOWN){
+      gravityRate *= 2;
+      return;
+    }
+    if(keyCode == controls[MOVE_LEFT]){
+      curBlock.tryMoveLeft();
+      return;
+    }
+    if(keyCode == controls[MOVE_RIGHT]){
+      curBlock.tryMoveRight();
+      return;
+    }
   }
 }

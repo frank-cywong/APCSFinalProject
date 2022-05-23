@@ -38,4 +38,22 @@ public class Block {
     }
     // todo for future for we have blocks off the main playing field
   }
+  void tryMoveLeft(){
+    for(Tile t : tiles){
+      if(!t.canMoveTo(-1,0)){
+        return;
+      }
+    }
+    boardXPos--;
+    updateTilePos();
+  }
+  void tryMoveRight(){
+    for(Tile t : tiles){
+      if(!t.canMoveTo(1,0)){
+        return;
+      }
+    }
+    boardXPos++;
+    updateTilePos();
+  }
 }

@@ -14,4 +14,11 @@ public class Screen {
       }
     }
   }
+  void onKeyPressed(int keyCode){
+    if (hasBoards){
+      for (Board b : boards){
+        b.onKeyPressed(keyCode);
+      }
+    }
+  }
 }
