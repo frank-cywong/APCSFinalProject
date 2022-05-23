@@ -2,6 +2,8 @@ public class Board {
   Block curBlock;
   int topLeftX = 0;
   int topLeftY = 0;
+  final int gravityRate = 30; // one down move every 30 frames
+  int gravityTickCounter = 0;
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
   static final int statZoneWidth = 160;
@@ -29,8 +31,14 @@ public class Board {
         tiles[j][i].render(coords[0], coords[1]);
       }
     }
+    // process gravity
+    gravityTickCounter++;
+    if(gravityTickCounter >= gravityRate){
+      gravityTickCounter = 0;
+      curBlock.doGravity();
+    }
   }
   int[] boardCoordsToCoords(int col, int row) {
-    return(new int[] {col * TILE_SIZE + topLeftX + gameplayXOffset, (boardHeight - row) * TILE_SIZE + topLeftY + gameplayYOffset});
+    return(new int[] {col * TILE_SIZE + topLeftX + gameplayXOffset, (boardHeight - row - 1) * TILE_SIZE + topLeftY + gameplayYOffset});
   }
 }
