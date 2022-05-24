@@ -7,12 +7,14 @@ public class Board {
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
   static final int statZoneWidth = 160;
+  static final int fixBlockDelay = 30; // .5s delay for you to move the block after it hits
+  int fixBlockTickCounter = -1; // -1: block fix timer not running
   int boardWidth = 10;
   int boardHeight = 20;
   int[] controls = new int[CONTROLS_COUNT];
   Tile[][] tiles;
   public Board() {
-    curBlock = new Block(this);
+    generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
@@ -38,11 +40,38 @@ public class Board {
     gravityTickCounter++;
     if(gravityTickCounter >= gravityRate){
       gravityTickCounter = 0;
-      curBlock.doGravity();
+      boolean gravitySuccessful = curBlock.doGravity();
+      if(gravitySuccessful && fixBlockTickCounter >= 0){ // reset lock delay if moved by gravity successfully, note to self, make infinity resetting (ie. reset by any move) a config option in the future (SEE: https://tetris.fandom.com/wiki/Infinity)
+        fixBlockTickCounter = -1;
+      }
+    }
+    // process block locking
+    if(fixBlockTickCounter >= 0){
+      fixBlockTickCounter++;
+      if(fixBlockTickCounter >= fixBlockDelay){
+        fixBlockInPlace();
+      }
     }
   }
   int[] boardCoordsToCoords(int col, int row) {
     return(new int[] {col * TILE_SIZE + topLeftX + gameplayXOffset, (boardHeight - row - 1) * TILE_SIZE + topLeftY + gameplayYOffset});
+  }
+  void startFixingBlockInPlace(){
+    if(fixBlockTickCounter == -1){
+      fixBlockTickCounter = 0;
+    }
+  }
+  void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
+    fixBlockTickCounter = -1;
+    for(Tile t : curBlock.tiles){
+      t.parentBlock = null;
+    }
+    curBlock.tiles = null;
+    curBlock = null;
+    generateNewBlock();
+  }
+  void generateNewBlock(){ // generates new block, currently just filler
+    curBlock = new Block(this);
   }
   void onKeyPressed(int keyCode){
     // temp controls:
