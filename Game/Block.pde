@@ -18,18 +18,16 @@ public class Block {
       tiles[i].updateBoardPos(boardXPos + locs[i][0], boardYPos + locs[i][1]);
     }
   }
-  void fixInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
-    //TODO
-  }
-  void doGravity(){
+  boolean doGravity(){
     for(Tile t : tiles){
       if(!t.canMoveTo(0, -1)){
-        fixInPlace();
-        return;
+        parent.startFixingBlockInPlace();
+        return false;
       }
     }
     boardYPos--;
     updateTilePos();
+    return true;
   }
   void render() {
     updateTilePos();
