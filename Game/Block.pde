@@ -54,4 +54,7 @@ public class Block {
     boardXPos++;
     updateTilePos();
   }
+  void hardDrop(){
+    while(doGravity());
+  }
 }
