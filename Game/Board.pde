@@ -94,5 +94,9 @@ public class Board {
       curBlock.tryMoveRight();
       return;
     }
+    if(keyCode == controls[HARD_DROP]){
+      curBlock.hardDrop();
+      return;
+    }
   }
 }
