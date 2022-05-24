@@ -14,7 +14,12 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 ## Development Log
 
 - May 23, 2022 (Monday)
-	- Frank: [FILL THIS IN]
+	- Frank:
+		- Getting a block and the screen to render in Processing
+		- Getting a block to fall down by gravity
+		- Pass through key presses and allow gravity to be adjusted by the up/down arrow
+		- Make the block movable with A/D
+		- Make the block lock in place when it can't move anymore and after a .5s delay, after which a new block is spawned
 	- Nicholas: [FILL THIS IN]
 - May 24, 2022 (Tuesday)
 	- Frank: [FILL THIS IN]
