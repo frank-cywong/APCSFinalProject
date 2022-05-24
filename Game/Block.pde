@@ -1,5 +1,5 @@
 public class Block {
-  int boardXPos = 8;
+  int boardXPos = 7;
   int boardYPos = 18;
   Board parent;
   boolean boardDoesRendering = true;
@@ -10,12 +10,12 @@ public class Block {
                    {{-1, 0}, {0, 0}, {0, 1}, {1, 1}},  // S piece -1 0, 0 0, 0 1, 1 1
                    {{-1, 0}, {0, 0}, {0, 1}, {1, 0}},  // T piece -1 0, 0 0, 0 1, 1 0
                    {{-1, 1}, {0, 1}, {0, 0}, {1, 0}}}; //  Z piece -1 1, 0 1, 0 0, 1 0
-  int curr;
+  int curr = 3;
   Tile[] tiles;
   public Block(Board parent) {
     this.parent = parent;
     tiles = new Tile[locs[curr].length];
-    for (int i = 0; i < locs.length; i++) {
+    for (int i = 0; i < locs[curr].length; i++) {
       tiles[i] = new Tile(parent, this);
     }
   }

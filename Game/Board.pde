@@ -1,3 +1,4 @@
+import java.util.HashSet;
 public class Board {
   Block curBlock;
   int topLeftX = 0;
@@ -66,6 +67,17 @@ public class Board {
       fixBlockTickCounter = 0;
       return;
     }
+    HashSet<Integer> rowsToCheck = new HashSet<Integer>();
+    for(Tile t : curBlock.tiles){
+      rowsToCheck.add(t.getBoardYPos());
+    }
+    int[] a = new int[rowsToCheck.size()];
+    int index = 0;
+    for(int row : rowsToCheck){
+      a[index] = row;
+      index++;
+    }
+    tryClearRows(a);
     fixBlockTickCounter = -1;
     for(Tile t : curBlock.tiles){
       t.parentBlock = null;
@@ -73,6 +85,60 @@ public class Board {
     curBlock.tiles = null;
     curBlock = null;
     generateNewBlock();
+  }
+  void tryClearRows(int[] rows){
+    //System.out.println(Arrays.toString(rows));
+    rows = sort(rows);
+    ArrayList<Integer> rowsToClear = new ArrayList<Integer>();
+    for(int row : rows){
+      boolean fullRow = true;
+      for(int col = 0; col < boardWidth; col++){
+        if(tiles[row][col] == null){
+          fullRow = false;
+          break;
+        }
+      }
+      if(fullRow){
+        rowsToClear.add(row);
+      }
+    }
+    if(rowsToClear.size() == 0){
+      return;
+    }
+    //System.out.println(rowsToClear);
+    int[] rowsClearedBelow = new int[boardHeight + 5]; // ie. move this row down by x amount
+    int moveDownBy = 0;
+    int curRowCheck = 0;
+    for(int i = 0; i < boardHeight + 5; i++){
+     if(curRowCheck < rowsToClear.size() && rowsToClear.get(curRowCheck) == i){
+       moveDownBy++;
+       curRowCheck++;
+       rowsClearedBelow[i] = -1; // ie. cleared
+       continue;
+     }
+     rowsClearedBelow[i] = moveDownBy;
+    }
+    for(int row = 0; row < boardHeight + 5; row++){
+      moveDownBy = rowsClearedBelow[row];
+      if(moveDownBy == -1){
+        for(int col = 0; col < boardWidth; col++){
+          tiles[row][col] = null;
+        }
+        continue;
+      }
+      if(moveDownBy == 0){
+        continue;
+      }
+      //System.out.println("For row: " + row + ", moveDownBy=" + moveDownBy);
+      for(int col = 0; col < boardWidth; col++){
+        tiles[row - moveDownBy][col] = tiles[row][col];
+        if(tiles[row][col] != null){
+          //System.out.println("SENDING TILE AT " + col + ", " + row + " DOWN BY " + moveDownBy);
+          tiles[row][col].updateBoardPos(col, row - moveDownBy);
+        }
+        tiles[row][col] = null;
+      }
+    }
   }
   void generateNewBlock(){ // generates new block, currently just filler
     curBlock = new Block(this);

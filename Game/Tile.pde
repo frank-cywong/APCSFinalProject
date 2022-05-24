@@ -43,4 +43,10 @@ public class Tile {
     boardYPos = newBoardYPos;
     parent.tiles[boardYPos][boardXPos] = this;
   }
+  public int getBoardXPos(){ // if boardXPos and boardYPos are modified erroneously its very bad, hence getter & setter methods
+    return boardXPos;
+  }
+  public int getBoardYPos(){
+    return boardYPos;
+  }
 }
