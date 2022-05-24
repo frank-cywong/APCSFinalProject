@@ -8,14 +8,18 @@ public class Tile {
   public Tile(Board parent) {
     this.parent = parent;
   }
-  public Tile(Board parent, Block parentBlock){
+  public Tile(Board parent, Block parentBlock, int c){
     this.parent = parent;
     this.parentBlock = parentBlock;
+    this.c = c;
   }
   public void render(int xcor, int ycor) {
     noStroke();
     fill(c);
     rect(xcor, ycor, TILE_SIZE, TILE_SIZE);
+  }
+  public boolean canMoveTo(int[] a){
+    return canMoveTo(a[0], a[1]);
   }
   public boolean canMoveTo(int dx, int dy){
     int nx = boardXPos + dx;
