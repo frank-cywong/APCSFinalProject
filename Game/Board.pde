@@ -62,6 +62,10 @@ public class Board {
     }
   }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
+    if(curBlock.doGravity()){ // sanity check
+      fixBlockTickCounter = 0;
+      return;
+    }
     fixBlockTickCounter = -1;
     for(Tile t : curBlock.tiles){
       t.parentBlock = null;
