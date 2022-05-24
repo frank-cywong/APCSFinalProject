@@ -141,7 +141,7 @@ public class Board {
     }
   }
   void generateNewBlock(){ // generates new block, currently just filler
-    curBlock = new Block(this);
+    curBlock = new Block(this,Block.I_PIECE);
   }
   void onKeyPressed(int keyCode){
     // temp controls:
@@ -162,6 +162,14 @@ public class Board {
     }
     if(keyCode == controls[MOVE_RIGHT]){
       curBlock.tryMoveRight();
+      return;
+    }
+    if(keyCode == controls[ROTATE_CCW]){
+      curBlock.rotateBlock(false);
+      return;
+    }
+    if(keyCode == controls[ROTATE_CW]){
+      curBlock.rotateBlock(true);
       return;
     }
     if(keyCode == controls[HARD_DROP]){
