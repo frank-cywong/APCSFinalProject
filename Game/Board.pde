@@ -141,7 +141,7 @@ public class Board {
     }
   }
   void generateNewBlock(){ // generates new block, currently just filler
-    curBlock = new Block(this,Block.I_PIECE);
+    curBlock = new Block(this,Block.Z_PIECE);
   }
   void onKeyPressed(int keyCode){
     // temp controls:
