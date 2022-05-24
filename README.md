@@ -20,7 +20,10 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Pass through key presses and allow gravity to be adjusted by the up/down arrow
 		- Make the block movable with A/D
 		- Make the block lock in place when it can't move anymore and after a .5s delay, after which a new block is spawned
-	- Nicholas: [FILL THIS IN]
+	- Nicholas: 
+		- Created initial class files
+		- Added some methods and instance variables
+
 - May 24, 2022 (Tuesday)
 	- Frank: [FILL THIS IN]
 	- Nicholas: [FILL THIS IN]
