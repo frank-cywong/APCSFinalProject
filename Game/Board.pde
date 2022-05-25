@@ -9,6 +9,10 @@ public class Board {
   int topLeftY = 0;
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
+  int levelScoreMultiplier = 1;
+  final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
+  int score = 0;
+  static final int scorePerHardDropLine = 2;
   boolean stopped = false;
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
@@ -41,6 +45,8 @@ public class Board {
     textAlign(LEFT, TOP);
     text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
     nextBlockIcon.render();
+    fill(255);
+    text("Score: " + score, topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + 120);
     curBlock.render();
     for(int i = 0; i < boardWidth; i++){
       for(int j = 0; j < boardHeight; j++){
@@ -131,6 +137,7 @@ public class Board {
     if(rowsToClear.size() == 0){
       return;
     }
+    score += levelScoreMultiplier * scoresByLineCount[rowsToClear.size() - 1];
     //System.out.println(rowsToClear);
     int[] rowsClearedBelow = new int[boardHeight + 5]; // ie. move this row down by x amount
     int moveDownBy = 0;
@@ -210,7 +217,7 @@ public class Board {
       return;
     }
     if(keyCode == controls[HARD_DROP]){
-      curBlock.hardDrop();
+      score += scorePerHardDropLine * curBlock.hardDrop();
       return;
     }
   }
