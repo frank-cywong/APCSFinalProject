@@ -111,8 +111,10 @@ public class Block {
     boardXPos++;
     updateTilePos();
   }
-  void hardDrop(){
-    while(doGravity());
+  int hardDrop(){
+    int rows = 0;
+    while(doGravity()){rows++;};
+    return rows;
   }
   // returns p3 = p1 - p2, where all points are 2d arrays
   int[] coordSubtract(int[] a, int[] b){
