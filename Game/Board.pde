@@ -162,7 +162,7 @@ public class Board {
       }
     }
     curBlock = new Block(this,upcomingBlocks.remove());
-    nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 20);
+    nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
   }
   void onKeyPressed(int keyCode){
     // temp controls:

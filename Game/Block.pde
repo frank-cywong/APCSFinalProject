@@ -90,7 +90,7 @@ public class Block {
       return;
     }
     for(int i = 0; i < tiles.length; i++){
-      tiles[i].render(rawXPos + TILE_SIZE * locs[curr][rot][i][0], rawYPos + TILE_SIZE * locs[curr][rot][i][1]);
+      tiles[i].render(rawXPos + TILE_SIZE * locs[curr][rot][i][0], rawYPos - TILE_SIZE * locs[curr][rot][i][1]);
     }
   }
   void tryMoveLeft(){
