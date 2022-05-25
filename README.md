@@ -25,5 +25,11 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Added some methods and instance variables
 
 - May 24, 2022 (Tuesday)
-	- Frank: [FILL THIS IN]
+	- Frank:
+		- Make blocks lock in place when they can't move anymore
+		- Make Z drop a block to the lower-most position
+		- Make blocks rotate when Q/E pressed and hardcode in rotation data
+		- Make rows disappear once they are filled
+		- Make blocks generate randomly while not having long streaks based on a bag-based system
+		- Display the next block on the board
 	- Nicholas: [FILL THIS IN]
