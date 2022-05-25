@@ -13,7 +13,7 @@ static final int CONTROLS_COUNT = 7;
 Screen curScreen;
 void setup(){
   curScreen = new Screen("GAMESCREEN");
-  size(560, 720);
+  size(640, 720);
 }
 void draw(){
   curScreen.onDraw();

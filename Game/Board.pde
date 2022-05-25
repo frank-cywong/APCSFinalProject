@@ -1,19 +1,24 @@
 import java.util.HashSet;
+import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Collections;
 public class Board {
   Block curBlock;
+  Block nextBlockIcon;
   int topLeftX = 0;
   int topLeftY = 0;
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
-  static final int statZoneWidth = 160;
+  static final int statZoneWidth = 240;
   static final int fixBlockDelay = 30; // .5s delay for you to move the block after it hits
   int fixBlockTickCounter = -1; // -1: block fix timer not running
   int boardWidth = 10;
   int boardHeight = 20;
   int[] controls = new int[CONTROLS_COUNT];
   Tile[][] tiles;
+  Queue<Integer> upcomingBlocks = new ArrayDeque<Integer>();
   public Board() {
     generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
@@ -27,6 +32,11 @@ public class Board {
     rect(topLeftX, topLeftY, gameplayXOffset * 2 + boardWidth * TILE_SIZE + statZoneWidth, gameplayYOffset * 2 + boardHeight * TILE_SIZE);
     fill(0);
     rect(topLeftX + gameplayXOffset, topLeftY + gameplayYOffset, boardWidth * TILE_SIZE, boardHeight * TILE_SIZE);
+    fill(255);
+    textSize(24);
+    textAlign(LEFT, TOP);
+    text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
+    nextBlockIcon.render();
     curBlock.render();
     for(int i = 0; i < boardWidth; i++){
       for(int j = 0; j < boardHeight; j++){
@@ -141,7 +151,18 @@ public class Board {
     }
   }
   void generateNewBlock(){ // generates new block, currently just filler
-    curBlock = new Block(this,Block.Z_PIECE);
+    if(upcomingBlocks.size() <= 1){ // make new blocks first
+      ArrayList<Integer> toAdd = new ArrayList<Integer>(Block.BLOCK_TYPE_COUNT);
+      for(int i = 0; i < Block.BLOCK_TYPE_COUNT; i++){
+        toAdd.add(i);
+      }
+      Collections.shuffle(toAdd);
+      for(int blockType : toAdd){
+        upcomingBlocks.add(blockType);
+      }
+    }
+    curBlock = new Block(this,upcomingBlocks.remove());
+    nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 20);
   }
   void onKeyPressed(int keyCode){
     // temp controls:
