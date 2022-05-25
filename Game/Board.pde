@@ -9,6 +9,7 @@ public class Board {
   int topLeftY = 0;
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
+  boolean stopped = false;
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
   static final int statZoneWidth = 240;
@@ -26,6 +27,9 @@ public class Board {
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
   }
   void render() {
+    if(stopped){
+      return;
+    }
     // for now temp, just draw the block
     noStroke();
     fill(#404040);
@@ -72,14 +76,26 @@ public class Board {
       fixBlockTickCounter = 0;
     }
   }
+  void endGame(){
+    stopped = true;
+    // TO DO
+  }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
     if(curBlock.doGravity()){ // sanity check
       fixBlockTickCounter = 0;
       return;
     }
     HashSet<Integer> rowsToCheck = new HashSet<Integer>();
+    boolean inGameplayBounds = false;
     for(Tile t : curBlock.tiles){
+      if(t.getBoardYPos() < boardHeight){
+        inGameplayBounds = true;
+      }
       rowsToCheck.add(t.getBoardYPos());
+    }
+    if(!inGameplayBounds){ // if block is entirely out of bounds
+      endGame();
+      return;
     }
     int[] a = new int[rowsToCheck.size()];
     int index = 0;
