@@ -32,4 +32,6 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Make rows disappear once they are filled
 		- Make blocks generate randomly while not having long streaks based on a bag-based system
 		- Display the next block on the board
-	- Nicholas: [FILL THIS IN]
+	- Nicholas: 
+		- Added configurations for the other possible tetrominoes
+	
