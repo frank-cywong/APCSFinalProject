@@ -7,6 +7,7 @@ public class Board {
   Block nextBlockIcon;
   int topLeftX = 0;
   int topLeftY = 0;
+  int originalGravityRate = 30; // For soft drop use
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
   int levelScoreMultiplier = 1;
@@ -25,6 +26,7 @@ public class Board {
   Tile[][] tiles;
   Queue<Integer> upcomingBlocks = new ArrayDeque<Integer>();
   Screen parent;
+  boolean isSoftDropping = false;
   public Board(Screen parent) {
     generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
@@ -64,6 +66,9 @@ public class Board {
     if(gravityTickCounter >= gravityRate){
       gravityTickCounter = 0;
       boolean gravitySuccessful = curBlock.doGravity();
+      if(gravitySuccessful && isSoftDropping){
+        score += 1;
+      }
       if(gravitySuccessful && fixBlockTickCounter >= 0){ // reset lock delay if moved by gravity successfully, note to self, make infinity resetting (ie. reset by any move) a config option in the future (SEE: https://tetris.fandom.com/wiki/Infinity)
         fixBlockTickCounter = -1;
       }
@@ -192,14 +197,14 @@ public class Board {
   void onKeyPressed(int keyCode){
     // temp controls:
     if(keyCode == UP){
-      gravityRate /= 2;
-      if(gravityRate < 1){
-        gravityRate = 1;
+      originalGravityRate /= 2;
+      if(originalGravityRate < 1){
+        originalGravityRate = 1;
       }
       return;
     }
     if(keyCode == DOWN){
-      gravityRate *= 2;
+      originalGravityRate *= 2;
       return;
     }
     if(keyCode == controls[MOVE_LEFT]){
@@ -218,9 +223,23 @@ public class Board {
       curBlock.rotateBlock(true);
       return;
     }
+    if(keyCode == controls[SOFT_DROP]){
+      if(!isSoftDropping){
+        isSoftDropping = true;
+        gravityRate = originalGravityRate / 10;
+      }
+    }
     if(keyCode == controls[HARD_DROP]){
       score += scorePerHardDropLine * curBlock.hardDrop();
       return;
+    }
+  }
+  void onKeyReleased(int keyCode){
+    if(keyCode == controls[SOFT_DROP]){
+      if(isSoftDropping){
+        isSoftDropping = false;
+        gravityRate = originalGravityRate;
+      }
     }
   }
 }
