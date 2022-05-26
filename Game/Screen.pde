@@ -57,6 +57,14 @@ public class Screen {
       return;
     }
   }
+  void onKeyReleased(int keyCode){
+    if (hasBoards){
+      for (Board b : boards){
+        b.onKeyReleased(keyCode);
+      }
+      return;
+    }
+  }
   // returns if x is in [a,b]
   boolean isInRange(int x, int a, int b){
     return(a <= x && x <= b);

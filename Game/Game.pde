@@ -25,6 +25,9 @@ void keyPressed(){
   //System.out.println(keyCode);
   curScreen.onKeyPressed(keyCode);
 }
+void keyReleased(){
+  curScreen.onKeyReleased(keyCode);
+}
 void mousePressed(){
   curScreen.onMousePressed(mouseX, mouseY);
 }
