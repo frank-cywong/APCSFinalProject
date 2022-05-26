@@ -10,9 +10,12 @@ static final int HOLD_PIECE = 6;
 
 static final int CONTROLS_COUNT = 7;
 
+static final String SCREENTYPE_GAME = "GAMESCREEN";
+static final String SCREENTYPE_END = "ENDSCREEN";
+
 Screen curScreen;
 void setup(){
-  curScreen = new Screen("GAMESCREEN");
+  changeScreen(SCREENTYPE_GAME);
   size(640, 720);
 }
 void draw(){
@@ -21,4 +24,13 @@ void draw(){
 void keyPressed(){
   //System.out.println(keyCode);
   curScreen.onKeyPressed(keyCode);
+}
+void mousePressed(){
+  curScreen.onMousePressed(mouseX, mouseY);
+}
+void changeScreen(String screenType){
+  curScreen = new Screen(screenType, this);
+}
+void changeScreen(String screenType, Object[] args){
+  curScreen = new Screen(screenType, this, args);
 }
