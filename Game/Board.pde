@@ -24,11 +24,13 @@ public class Board {
   int[] controls = new int[CONTROLS_COUNT];
   Tile[][] tiles;
   Queue<Integer> upcomingBlocks = new ArrayDeque<Integer>();
-  public Board() {
+  Screen parent;
+  public Board(Screen parent) {
     generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
+    this.parent = parent;
   }
   void render() {
     if(stopped){
@@ -84,7 +86,7 @@ public class Board {
   }
   void endGame(){
     stopped = true;
-    // TO DO
+    parent.parent.changeScreen(SCREENTYPE_END, (Object[])(new Integer[]{score}));
   }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
     if(curBlock.doGravity()){ // sanity check

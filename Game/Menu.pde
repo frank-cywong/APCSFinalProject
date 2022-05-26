@@ -1,5 +1,5 @@
 public class Menu extends Screen {
-  Menu(String screentype) {
-    super(screentype);
+  Menu(String screentype, Game parent) {
+    super(screentype, parent);
   }
 }
