@@ -23,6 +23,9 @@ public class Board {
   int boardWidth = 10;
   int boardHeight = 20;
   int[] controls = new int[CONTROLS_COUNT];
+  boolean heldBlockEnabled = true;
+  boolean heldBlockUsed = false; // true if hold block has been used alr and can't be used again until the cur block is locked in place
+  Block heldBlock = null;
   Tile[][] tiles;
   Queue<Integer> upcomingBlocks = new ArrayDeque<Integer>();
   Screen parent;
@@ -48,9 +51,14 @@ public class Board {
     textSize(24);
     textAlign(LEFT, TOP);
     text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
+    text("Score: " + score, topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + (heldBlockEnabled ? 240 : 120));
+    if(heldBlockEnabled){
+      text("Held Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + 120);
+      if(heldBlock != null){
+        heldBlock.render();
+      }
+    }
     nextBlockIcon.render();
-    fill(255);
-    text("Score: " + score, topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + 120);
     curBlock.render();
     for(int i = 0; i < boardWidth; i++){
       for(int j = 0; j < boardHeight; j++){
@@ -97,6 +105,9 @@ public class Board {
     if(curBlock.doGravity()){ // sanity check
       fixBlockTickCounter = 0;
       return;
+    }
+    if(heldBlockUsed){
+      heldBlockUsed = false;
     }
     HashSet<Integer> rowsToCheck = new HashSet<Integer>();
     boolean inGameplayBounds = false;
@@ -180,7 +191,7 @@ public class Board {
       }
     }
   }
-  void generateNewBlock(){ // generates new block, currently just filler
+  void generateNewBlock(){ // generates new block
     if(upcomingBlocks.size() <= 1){ // make new blocks first
       ArrayList<Integer> toAdd = new ArrayList<Integer>(Block.BLOCK_TYPE_COUNT);
       for(int i = 0; i < Block.BLOCK_TYPE_COUNT; i++){
@@ -193,6 +204,38 @@ public class Board {
     }
     curBlock = new Block(this,upcomingBlocks.remove());
     nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
+  }
+  void tryHoldBlock(){
+    if(!heldBlockEnabled || heldBlockUsed){ // can't hold block
+      return;
+    }
+    heldBlockUsed = true;
+    Block temp = heldBlock;
+    heldBlock = curBlock;
+    curBlock = temp;
+    heldBlock.boardDoesRendering = false;
+    for (int i = 0; i < heldBlock.locs[heldBlock.curr][heldBlock.rot].length; i++) {
+      //System.out.println("Updating tile " + i + " to (" + (boardXPos + locs[i][0]) + ", " + (boardYPos + locs[i][1]) + ")");
+      Tile t = heldBlock.tiles[i];
+      if(tiles[t.boardYPos][t.boardXPos] == t){
+        tiles[t.boardYPos][t.boardXPos] = null;
+      }
+      t.onBoard = false;
+    }
+    heldBlock.rot = 0;
+    heldBlock.boardXPos = BLOCK_START_X_POS;
+    heldBlock.boardYPos = BLOCK_START_Y_POS;
+    heldBlock.rawXPos = topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE;
+    heldBlock.rawYPos = topLeftY + gameplayYOffset + TILE_SIZE + 160;
+    if(curBlock == null){
+      generateNewBlock();
+    } else {
+      curBlock.boardDoesRendering = true;
+      for(Tile t : curBlock.tiles){
+        t.onBoard = true;
+      }
+      curBlock.updateTilePos();
+    }
   }
   void onKeyPressed(int keyCode){
     // temp controls:
@@ -231,6 +274,10 @@ public class Board {
     }
     if(keyCode == controls[HARD_DROP]){
       score += scorePerHardDropLine * curBlock.hardDrop();
+      return;
+    }
+    if(keyCode == controls[HOLD_PIECE]){
+      tryHoldBlock();
       return;
     }
   }

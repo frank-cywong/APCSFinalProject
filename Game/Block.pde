@@ -1,6 +1,6 @@
 public class Block {
-  int boardXPos = 4;
-  int boardYPos = 20;
+  int boardXPos = BLOCK_START_X_POS;
+  int boardYPos = BLOCK_START_Y_POS;
   Board parent;
   boolean boardDoesRendering = true;
   int rawXPos = 0; // used only if boardDoesRendering is false, represents top left corner of "center"
