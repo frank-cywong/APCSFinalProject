@@ -41,7 +41,7 @@ public class Block {
                    {{1, 1}, {1, 0}, {0, 0}, {0, -1}},
                    {{-1, 0}, {0, 0}, {0, -1}, {1, -1}},
                    {{0, 1}, {0, 0}, {-1, 0}, {-1, -1}}}};
-  int [] colors = {#00FFFF, #0000FF, #FFAA00, #FFFF00, #00FF00, #9900FF, #FF0000};
+  int [] colors = {#00FFFF, #0000FF, #FFAA00, #FFFF00, #00FF00, #800080, #FF0000};
   int curr;
   int rot = 0;
   Tile[] tiles;

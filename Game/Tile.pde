@@ -14,7 +14,7 @@ public class Tile {
     this.c = c;
   }
   public void render(int xcor, int ycor) {
-    noStroke();
+    stroke(100);
     fill(c);
     rect(xcor, ycor, TILE_SIZE, TILE_SIZE);
   }
