@@ -13,6 +13,9 @@ static final int CONTROLS_COUNT = 7;
 static final String SCREENTYPE_GAME = "GAMESCREEN";
 static final String SCREENTYPE_END = "ENDSCREEN";
 
+static final int BLOCK_START_X_POS = 4;
+static final int BLOCK_START_Y_POS = 20;
+
 Screen curScreen;
 void setup(){
   changeScreen(SCREENTYPE_GAME);
