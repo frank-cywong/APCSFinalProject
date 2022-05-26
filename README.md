@@ -35,3 +35,8 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 	- Nicholas: 
 		- Added configurations for the other possible tetrominoes
 	
+- May 25, 2022 (Wednesday)
+	- Frank:
+		- Added end of game detection when board filled
+		- Basic score system with it being displayed on the board as well
+	- Nicholas:
