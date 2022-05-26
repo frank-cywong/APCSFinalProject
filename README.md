@@ -40,3 +40,4 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Added end of game detection when board filled
 		- Basic score system with it being displayed on the board as well
 	- Nicholas:
+		- Changed the appearances of blocks(different colors and borders for the square tiles)
