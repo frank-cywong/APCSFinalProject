@@ -5,6 +5,7 @@ public class Tile {
   boolean onBoard = true;
   private int boardXPos;
   private int boardYPos;
+  PImage displayImage;
   public Tile(Board parent) {
     this.parent = parent;
   }
@@ -12,11 +13,30 @@ public class Tile {
     this.parent = parent;
     this.parentBlock = parentBlock;
     this.c = c;
+    updateTexture();
   }
   public void render(int xcor, int ycor) {
-    stroke(100);
-    fill(c);
-    rect(xcor, ycor, TILE_SIZE, TILE_SIZE);
+    //stroke(100);
+    //fill(c);
+    //rect(xcor, ycor, TILE_SIZE, TILE_SIZE);
+    image(displayImage, xcor, ycor, TILE_SIZE, TILE_SIZE);
+  }
+  int scaleColor(int c, byte scalar){
+    double scalar_d = (double)((int)scalar & 0xFF) / 0xFF;
+    int output = 0;
+    output += (int)((c & 0xFF) * scalar_d);
+    output += ((int)(((c >> 8) & 0xFF) * scalar_d)) << 8;
+    output += ((int)(((c >> 16) & 0xFF) * scalar_d)) << 16;
+    return output;
+  }
+  void updateTexture(){
+    byte[] texture = parent.parent.parent.tileTexture;
+    displayImage = createImage(TILE_SIZE, TILE_SIZE, RGB);
+    displayImage.loadPixels();
+    for(int i = 0; i < 1024; i++){
+      displayImage.pixels[i] = scaleColor(c, texture[i]);
+    }
+    displayImage.updatePixels();
   }
   public boolean canMoveTo(int[] a){
     return canMoveTo(a[0], a[1]);

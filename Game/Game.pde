@@ -21,12 +21,17 @@ static final String DEFAULT_DATA_FILE = "data/DEFAULT_CONFIG_DATA_DO_NOT_MODIFY.
 
 static final String HIGHSCORE_DATA_CONFIG = "HIGH_SCORE";
 
+static final String TEXTURE_PACK_CONFIG = "TEXTURE_FILE";
+
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
 
+byte[] tileTexture;
+
 void setup(){
   config = localDataLoader.readConfigData();
+  tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
   changeScreen(SCREENTYPE_GAME);
   size(640, 720);
 }
@@ -64,6 +69,9 @@ boolean setConfig(String configOption, String value){
     config = new HashMap<String, String>();
   }
   config.put(configOption, value);
+  if(configOption == TEXTURE_PACK_CONFIG){
+    tileTexture = localDataLoader.loadTextureFromFile(value);
+  }
   return(localDataLoader.writeConfigData(config));
 }
 boolean setConfig(String configOption, String value, int board){

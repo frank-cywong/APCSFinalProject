@@ -44,4 +44,23 @@ public class DataLoader{
       return false;
     }
   }
+  // Loads texture from binary .texture file
+  byte[] loadTextureFromFile(String fileName){
+    try{
+      InputStream in = createInput(fileName);
+      if(in == null){
+        throw new IOException("File not found");
+      }
+      byte[] output = new byte[1024];
+      in.read(output);
+      in.close();
+      return output;
+    } catch (IOException e){
+      byte[] blank = new byte[1024];
+      for(int i = 0; i < 1024; i++){
+        blank[i] = (byte)0xFF;
+      }
+      return blank;
+    }
+  }
 }
