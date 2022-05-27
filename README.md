@@ -41,3 +41,11 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Basic score system with it being displayed on the board as well
 	- Nicholas:
 		- Changed the appearances of blocks(different colors and borders for the square tiles)
+
+- May 26, 2022 (Thursday)
+	- Frank:
+		- Added soft drop functionality
+		- Added ability to hold pieces
+		- Set up system for persistent file based data storage and DataLoader class
+		- Implement a high score mechanism which also acts as a test for persistent data storage
+	- Nicholas:
