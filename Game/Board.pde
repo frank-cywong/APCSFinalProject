@@ -32,11 +32,11 @@ public class Board {
   boolean isSoftDropping = false;
   int highScore = 0;
   public Board(Screen parent) {
+    this.parent = parent;
     generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
-    this.parent = parent;
     String tempHighScore = parent.parent.loadConfig(HIGHSCORE_DATA_CONFIG);
     highScore = (tempHighScore == null ? 0 : Integer.parseInt(tempHighScore));
   }
