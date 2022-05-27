@@ -49,3 +49,4 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Set up system for persistent file based data storage and DataLoader class
 		- Implement a high score mechanism which also acts as a test for persistent data storage
 	- Nicholas:
+		- Changed the board so that it resembled a grid
