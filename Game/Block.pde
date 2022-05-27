@@ -13,6 +13,7 @@ public class Block {
   static final int T_PIECE = 5;
   static final int Z_PIECE = 6;
   static final int BLOCK_TYPE_COUNT = 7;
+  // Indexes: [PIECE][ROT][TILE][X,Y]
   int[][][][] locs = {{{{-1, 0}, {0, 0}, {1, 0}, {2, 0}}, // I piece -1 0, 0 0, 1 0, 2 0
                    {{1, 1}, {1, 0}, {1, -1}, {1, -2}},
                    {{-1, -1}, {0, -1}, {1, -1}, {2, -1}},
@@ -41,6 +42,26 @@ public class Block {
                    {{1, 1}, {1, 0}, {0, 0}, {0, -1}},
                    {{-1, 0}, {0, 0}, {0, -1}, {1, -1}},
                    {{0, 1}, {0, 0}, {-1, 0}, {-1, -1}}}};
+  // Index: [PIECE] (I -> type 1, O -> type 2, else: type 0)
+  int[] wallKickPieceTypes = {1, 0, 0, 2, 0, 0, 0};
+  // Indexes: [PIECE_TYPE][ROT_TRANS][index][X,Y] - NOTE: index length may be 1 or 5, where ROT_TRANS is ORIG_STATE << 1 | (CLOCKWISE ? 0 : 1) (eg. 0 -> 1 would be ROT_STATE 0, 1 -> 0 would be ROT_STATE 3) 
+  int [][][][] wallKickOffsets = {{{{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, 2}},  // Everything else - 0 -> 1
+                  {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}}, // 0 -> 3
+                  {{0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2}}, // 1 -> 2
+                  {{0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2}}, // 1 -> 0
+                  {{0, 0}, {-1, 0}, {-1, 1}, {0, -2}, {-1, -2}}, // 2 -> 3
+                  {{0, 0}, {1, 0}, {1, 1}, {0, -2}, {1, -2}}, // 2 -> 1
+                  {{0, 0}, {-1, 0}, {-1, -1}, {0, 2}, {-1, 2}}, // 3 -> 0
+                  {{0, 0}, {-1, 0}, {-1, -1}, {0, 2}, {-1, 2}}}, // 3 -> 2
+                  {{{0, 0}, {-2, 0}, {1, 0}, {-2, -1}, {1, 2}}, // I type - 0 -> 1
+                  {{0, 0}, {-1, 0}, {2, 0}, {-1, 2}, {2, -1}}, // 0 -> 3
+                  {{0, 0}, {-1, 0}, {2, 0}, {-1, 2}, {2, -1}}, // 1 -> 2
+                  {{0, 0}, {2, 0}, {-1, 0}, {2, 1}, {-1, -2}}, // 1 -> 0
+                  {{0, 0}, {2, 0}, {-1, 0}, {2, 1}, {-1, -2}}, // 2 -> 3
+                  {{0, 0}, {1, 0}, {-2, 0}, {1, -2}, {-2, 1}}, // 2 -> 1
+                  {{0, 0}, {1, 0}, {-2, 0}, {1, -2}, {-2, 1}}, // 3 -> 0
+                  {{0, 0}, {-2, 0}, {1, 0}, {-2, -1}, {1, 2}}}, // 3 -> 2
+                  {{{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}, {{0, 0}}}}; // O type, every rot trans is 0, 0 
   int [] colors = {#00FFFF, #0000FF, #FFAA00, #FFFF00, #00FF00, #800080, #FF0000};
   int curr;
   int rot = 0;
@@ -116,6 +137,13 @@ public class Block {
     while(doGravity()){rows++;};
     return rows;
   }
+  // returns p3 = p1 + p2, where all points are 2d arrays
+  int[] coordAdd(int[] a, int[] b){
+    int[] o = new int[2];
+    o[0] = a[0] + b[0];
+    o[1] = a[1] + b[1];
+    return o;
+  }
   // returns p3 = p1 - p2, where all points are 2d arrays
   int[] coordSubtract(int[] a, int[] b){
     int[] o = new int[2];
@@ -125,12 +153,28 @@ public class Block {
   }
   void rotateBlock(boolean clockwise){
     int newRot = (clockwise ? (rot + 1) % 4 : (rot + 3) % 4); // +3 same as -1 but no negatives
-    for(int i = 0; i < tiles.length; i++){
-      if(!tiles[i].canMoveTo(coordSubtract(locs[curr][newRot][i],locs[curr][rot][i]))){
-        return;
+    int rotIndex = (rot << 1) | (clockwise ? 0 : 1);
+    int wallKickType = wallKickPieceTypes[curr];
+    int workingWallKick = -1;
+    for(int i = 0; i < wallKickOffsets[wallKickType][rotIndex].length; i++){
+      boolean success = true;
+      for(int j = 0; j < tiles.length; j++){
+        if(!tiles[j].canMoveTo(coordAdd(coordSubtract(locs[curr][newRot][j],locs[curr][rot][j]), wallKickOffsets[wallKickType][rotIndex][i]))){
+          success = false;
+          break;
+        }
+      }
+      if(success){
+        workingWallKick = i;
+        break;
       }
     }
+    if(workingWallKick == -1){
+      return;
+    }
     rot = newRot;
+    boardXPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][0];
+    boardYPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][1];
     updateTilePos();
   }
 }
