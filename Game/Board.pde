@@ -30,12 +30,15 @@ public class Board {
   Queue<Integer> upcomingBlocks = new ArrayDeque<Integer>();
   Screen parent;
   boolean isSoftDropping = false;
+  int highScore = 0;
   public Board(Screen parent) {
     generateNewBlock();
     tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
     this.parent = parent;
+    String tempHighScore = parent.parent.loadConfig(HIGHSCORE_DATA_CONFIG);
+    highScore = (tempHighScore == null ? 0 : Integer.parseInt(tempHighScore));
   }
   void render() {
     if(stopped){
@@ -52,6 +55,7 @@ public class Board {
     textAlign(LEFT, TOP);
     text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
     text("Score: " + score, topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + (heldBlockEnabled ? 240 : 120));
+    text("High Score: " + highScore, topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + (heldBlockEnabled ? 300 : 180));
     if(heldBlockEnabled){
       text("Held Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset + 120);
       if(heldBlock != null){
@@ -99,7 +103,12 @@ public class Board {
   }
   void endGame(){
     stopped = true;
-    parent.parent.changeScreen(SCREENTYPE_END, (Object[])(new Integer[]{score}));
+    boolean newHighScore = score > highScore;
+    if(newHighScore){
+      highScore = score;
+      parent.parent.setConfig(HIGHSCORE_DATA_CONFIG, Integer.toString(highScore));
+    }
+    parent.parent.changeScreen(SCREENTYPE_END, (new Object[]{score, newHighScore}));
   }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
     if(curBlock.doGravity()){ // sanity check

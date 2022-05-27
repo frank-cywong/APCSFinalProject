@@ -4,19 +4,21 @@ public class Screen {
   Board[] boards;
   Game parent;
   Object[] args = null;
+  int timer = 0;
   public Screen(String screentype, Game parent) {
     this.screentype = screentype;
+    this.parent = parent;
     hasBoards = (screentype == SCREENTYPE_GAME);
     boards = new Board[1];
     boards[0] = new Board(this);
-    this.parent = parent;
     switch(screentype){
-      case SCREENTYPE_END: // arg format: [score]
+      case SCREENTYPE_END: // arg format: [score, isThisANewHighScore]
+        timer = 3600;
         noStroke();
         fill(0x88000000);
         rect(0, 0, width, height);
         if(args == null){
-          args = (Object[])(new Integer[] {0});
+          args = (Object[])(new Object[] {0, false});
         }
     }
   }
@@ -33,6 +35,15 @@ public class Screen {
     }
     switch(screentype){
       case SCREENTYPE_END:
+        String scoreText = "Score: " + args[0];
+        if((Boolean)args[1]){
+          if(timer > 0){
+            timer--;
+          }
+          if(timer % 240 >= 120){ // every 2 seconds
+            scoreText = "NEW HIGH SCORE!";
+          }
+        }
         noStroke();
         fill(0xFF606060);
         rect(width / 2 - 150, height / 2 - 150, 300, 300);
@@ -41,7 +52,7 @@ public class Screen {
         textSize(48);
         text("Game Over!", width / 2, height / 2 - 100);
         textSize(32);
-        text("Score: " + args[0], width / 2, height / 2 - 30);
+        text(scoreText, width / 2, height / 2 - 30);
         fill(#CC4449);
         rect(width / 2 - 120, height / 2 + 20, 240, 100);
         fill(255);
