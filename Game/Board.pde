@@ -42,12 +42,19 @@ public class Board {
       return;
     }
     // for now temp, just draw the block
-    noStroke();
+    stroke(100);
     fill(#404040);
     rect(topLeftX, topLeftY, gameplayXOffset * 2 + boardWidth * TILE_SIZE + statZoneWidth, gameplayYOffset * 2 + boardHeight * TILE_SIZE);
     fill(0);
-    rect(topLeftX + gameplayXOffset, topLeftY + gameplayYOffset, boardWidth * TILE_SIZE, boardHeight * TILE_SIZE);
-    fill(255);
+    for (int x = topLeftX+gameplayXOffset;x<topLeftX+gameplayXOffset+boardWidth * TILE_SIZE;x+=TILE_SIZE){
+      for (int y = topLeftY+gameplayYOffset;y<topLeftY+gameplayYOffset+boardHeight * TILE_SIZE;y+=TILE_SIZE){
+        fill(0);
+        stroke(100);
+        rect(x, y, TILE_SIZE, TILE_SIZE);
+      }   
+    }
+    //rect(topLeftX + gameplayXOffset, topLeftY + gameplayYOffset, boardWidth * TILE_SIZE, boardHeight * TILE_SIZE);
+    //fill(255);
     textSize(24);
     textAlign(LEFT, TOP);
     text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
