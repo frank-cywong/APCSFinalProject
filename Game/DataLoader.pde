@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
@@ -7,7 +8,14 @@ import java.util.Arrays;
 public class DataLoader{
   HashMap<String, String> readConfigData(){
     HashMap<String, String> output = new HashMap<String, String>();
-    Scanner in = new Scanner(createInput(DATA_FILE));
+    InputStream inStream = createInput(DATA_FILE);
+    if(inStream == null){
+      inStream = createInput(DEFAULT_DATA_FILE); // Should always exist, only modify if adding new config
+    }
+    if(inStream == null){
+      return null;
+    }
+    Scanner in = new Scanner(inStream);
     while(in.hasNextLine()){
       String temp = in.nextLine();
       int toSplit = temp.indexOf(" = ");

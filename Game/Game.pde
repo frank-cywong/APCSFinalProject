@@ -17,6 +17,7 @@ static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
 
 static final String DATA_FILE = "data/PERSISTENT_DATA.dat";
+static final String DEFAULT_DATA_FILE = "data/DEFAULT_CONFIG_DATA_DO_NOT_MODIFY.dat"; // if this file and data_file doesn't exist VERY BAD THINGS HAPPEN
 
 static final String HIGHSCORE_DATA_CONFIG = "HIGH_SCORE";
 
