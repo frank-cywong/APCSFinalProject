@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -47,7 +48,13 @@ public class DataLoader{
   // Loads texture from binary .texture file
   byte[] loadTextureFromFile(String fileName){
     try{
-      InputStream in = createInput(fileName);
+      InputStream in = null;
+      if(fileName.substring(0,ABSOLUTE_FILE_PATH_PREFIX.length()).equals(ABSOLUTE_FILE_PATH_PREFIX)){
+        File f = new File(fileName.substring(ABSOLUTE_FILE_PATH_PREFIX.length()));
+        in = new FileInputStream(f);
+      } else {
+        in = createInput(fileName);
+      }
       if(in == null){
         throw new IOException("File not found");
       }

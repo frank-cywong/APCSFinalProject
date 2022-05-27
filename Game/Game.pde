@@ -23,6 +23,8 @@ static final String HIGHSCORE_DATA_CONFIG = "HIGH_SCORE";
 
 static final String TEXTURE_PACK_CONFIG = "TEXTURE_FILE";
 
+static final String ABSOLUTE_FILE_PATH_PREFIX = "ABSOLUTEPATH://";
+
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
