@@ -57,7 +57,8 @@ public class Board {
       }   
     }
     //rect(topLeftX + gameplayXOffset, topLeftY + gameplayYOffset, boardWidth * TILE_SIZE, boardHeight * TILE_SIZE);
-    //fill(255);
+    noStroke();
+    fill(255);
     textSize(24);
     textAlign(LEFT, TOP);
     text("Next Block:", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE, topLeftY + gameplayYOffset);
