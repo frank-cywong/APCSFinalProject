@@ -1,3 +1,6 @@
+# Local data files
+PERSISTENT_DATA.dat
+
 # Compiled class file
 *.class
 
