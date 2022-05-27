@@ -137,6 +137,13 @@ public class Block {
     while(doGravity()){rows++;};
     return rows;
   }
+  // returns p3 = p1 + p2, where all points are 2d arrays
+  int[] coordAdd(int[] a, int[] b){
+    int[] o = new int[2];
+    o[0] = a[0] + b[0];
+    o[1] = a[1] + b[1];
+    return o;
+  }
   // returns p3 = p1 - p2, where all points are 2d arrays
   int[] coordSubtract(int[] a, int[] b){
     int[] o = new int[2];
@@ -146,12 +153,28 @@ public class Block {
   }
   void rotateBlock(boolean clockwise){
     int newRot = (clockwise ? (rot + 1) % 4 : (rot + 3) % 4); // +3 same as -1 but no negatives
-    for(int i = 0; i < tiles.length; i++){
-      if(!tiles[i].canMoveTo(coordSubtract(locs[curr][newRot][i],locs[curr][rot][i]))){
-        return;
+    int rotIndex = (rot << 1) | (clockwise ? 0 : 1);
+    int wallKickType = wallKickPieceTypes[curr];
+    int workingWallKick = -1;
+    for(int i = 0; i < wallKickOffsets[wallKickType][rotIndex].length; i++){
+      boolean success = true;
+      for(int j = 0; j < tiles.length; j++){
+        if(!tiles[j].canMoveTo(coordAdd(coordSubtract(locs[curr][newRot][j],locs[curr][rot][j]), wallKickOffsets[wallKickType][rotIndex][i]))){
+          success = false;
+          break;
+        }
+      }
+      if(success){
+        workingWallKick = i;
+        break;
       }
     }
+    if(workingWallKick == -1){
+      return;
+    }
     rot = newRot;
+    boardXPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][0];
+    boardYPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][1];
     updateTilePos();
   }
 }
