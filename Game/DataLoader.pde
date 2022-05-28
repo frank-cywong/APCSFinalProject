@@ -10,8 +10,10 @@ public class DataLoader{
   HashMap<String, String> readConfigData(){
     HashMap<String, String> output = new HashMap<String, String>();
     InputStream inStream = createInput(DATA_FILE);
+    boolean writeData = false;
     if(inStream == null){
       inStream = createInput(DEFAULT_DATA_FILE); // Should always exist, only modify if adding new config
+      writeData = true;
     }
     if(inStream == null){
       return null;
@@ -26,6 +28,9 @@ public class DataLoader{
       output.put(temp.substring(0, toSplit), temp.substring(toSplit + 3));
     }
     in.close();
+    if(writeData){
+      writeConfigData(output);
+    }
     return output;
   }
   // Returns if write was successful
