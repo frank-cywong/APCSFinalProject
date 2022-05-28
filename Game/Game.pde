@@ -23,6 +23,8 @@ static final String HIGHSCORE_DATA_CONFIG = "HIGH_SCORE";
 
 static final String TEXTURE_PACK_CONFIG = "TEXTURE_FILE";
 
+static final String[] CONTROLS_CONFIG_LABEL_MAPPING = {"KEYBIND_LEFT", "KEYBIND_RIGHT", "KEYBIND_ROTATE_CCW", "KEYBIND_ROTATE_CW", "KEYBIND_HARD_DROP", "KEYBIND_SOFT_DROP", "KEYBIND_HOLD_PIECE"};
+
 static final String ABSOLUTE_FILE_PATH_PREFIX = "ABSOLUTEPATH://";
 
 Screen curScreen;
@@ -73,6 +75,11 @@ boolean setConfig(String configOption, String value){
   config.put(configOption, value);
   if(configOption == TEXTURE_PACK_CONFIG){
     tileTexture = localDataLoader.loadTextureFromFile(value);
+  }
+  if(configOption.substring(0, 8).equals("KEYBIND_")){
+    if(curScreen != null){
+      curScreen.updateBoardControls();
+    }
   }
   return(localDataLoader.writeConfigData(config));
 }

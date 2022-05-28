@@ -11,6 +11,7 @@ public class Screen {
     hasBoards = (screentype == SCREENTYPE_GAME);
     boards = new Board[1];
     boards[0] = new Board(this);
+    updateBoardControls();
     switch(screentype){
       case SCREENTYPE_END: // arg format: [score, isThisANewHighScore]
         timer = 3600;
@@ -86,6 +87,34 @@ public class Screen {
         if(isInRange(mouseX, width / 2 - 120, width / 2 + 120) && isInRange(mouseY, height / 2 + 20, height / 2 + 120)){ // start new game button
           parent.changeScreen(SCREENTYPE_GAME);
         }
+    }
+  }
+  void updateBoardControls(){
+    if(!hasBoards){
+      return;
+    }
+    Board b;
+    for(int i = 0; i < boards.length; i++){
+      b = boards[i];
+      for(int j = 0; j < CONTROLS_COUNT; j++){
+        String configOption = parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[j], i);
+        if(configOption == null){ // config option doesn't exist, so set it
+          int curConfig = b.controls[j];
+          parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[j], Character.isLetter((char)curConfig) ? "" + (char)(curConfig) : "" + curConfig , i);
+          continue;
+        }
+        int configInt;
+        if(configOption.length() == 1){ // directly interpret it as a key
+          configInt = configOption.charAt(0);
+        } else {
+          try {
+            configInt = Integer.parseInt(configOption);
+          } catch (NumberFormatException e){ // invalid config option, ignore it
+            continue;
+          }
+        }
+        b.controls[j] = configInt;
+      }
     }
   }
 }
