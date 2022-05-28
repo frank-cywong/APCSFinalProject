@@ -95,15 +95,25 @@ public class Screen {
     }
     Board b;
     for(int i = 0; i < boards.length; i++){
+      b = boards[i];
       for(int j = 0; j < CONTROLS_COUNT; j++){
-        String configOption = loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[j], i);
-        if(configOption == null){
+        String configOption = parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[j], i);
+        if(configOption == null){ // config option doesn't exist, so set it
+          int curConfig = b.controls[j];
+          parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[j], Character.isLetter((char)curConfig) ? "" + (char)(curConfig) : "" + curConfig , i);
           continue;
         }
         int configInt;
         if(configOption.length() == 1){ // directly interpret it as a key
           configInt = configOption.charAt(0);
+        } else {
+          try {
+            configInt = Integer.parseInt(configOption);
+          } catch (NumberFormatException e){ // invalid config option, ignore it
+            continue;
+          }
         }
+        b.controls[j] = configInt;
       }
     }
   }

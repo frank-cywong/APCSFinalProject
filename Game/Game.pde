@@ -76,6 +76,11 @@ boolean setConfig(String configOption, String value){
   if(configOption == TEXTURE_PACK_CONFIG){
     tileTexture = localDataLoader.loadTextureFromFile(value);
   }
+  if(configOption.substring(0, 8).equals("KEYBIND_")){
+    if(curScreen != null){
+      curScreen.updateBoardControls();
+    }
+  }
   return(localDataLoader.writeConfigData(config));
 }
 boolean setConfig(String configOption, String value, int board){
