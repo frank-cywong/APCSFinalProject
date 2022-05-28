@@ -50,3 +50,13 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Implement a high score mechanism which also acts as a test for persistent data storage
 	- Nicholas:
 		- Changed the board so that it resembled a grid
+
+- May 27, 2022 (Friday)
+	- Frank: 
+		- Patch bug with text colours
+		- Separate data file into a default one, and a local one which isn't on .gitignore
+		- Add wall kicks
+		- Add texture loading functionality as well as a Java command-line tool to convert .png files into the custom binary texture format
+		- Allow customising keybindings from the config file
+	- Nicholas:
+
