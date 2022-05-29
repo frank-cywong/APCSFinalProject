@@ -12,6 +12,10 @@ static final int CONTROLS_COUNT = 7;
 
 static final String SCREENTYPE_GAME = "GAMESCREEN";
 static final String SCREENTYPE_END = "ENDSCREEN";
+static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
+static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
+static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
+static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN"; // TODO
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
@@ -27,6 +31,13 @@ static final String[] CONTROLS_CONFIG_LABEL_MAPPING = {"KEYBIND_LEFT", "KEYBIND_
 
 static final String ABSOLUTE_FILE_PATH_PREFIX = "ABSOLUTEPATH://";
 
+static final int MIN_PLAYER_COUNT = 1;
+static final int MAX_PLAYER_COUNT = 2;
+static final int MIN_GRAVITY_FRAMES = 1;
+static final int MAX_GRAVITY_FRAMES = 120;
+static final int MIN_FIX_BLOCK_DELAY = 0;
+static final int MAX_FIX_BLOCK_DELAY = 60;
+
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
@@ -36,7 +47,7 @@ byte[] tileTexture;
 void setup(){
   config = localDataLoader.readConfigData();
   tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
-  changeScreen(SCREENTYPE_GAME);
+  changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
 }
 void draw(){
@@ -44,6 +55,9 @@ void draw(){
 }
 void keyPressed(){
   //System.out.println(keyCode);
+  if(key == ESC && curScreen != null && !curScreen.screentype.equals(SCREENTYPE_MAINMENU)){ // Stop sketch from terminating when ESC is pressed unless sketch is on main menu
+    key = 0;
+  }
   curScreen.onKeyPressed(keyCode);
 }
 void keyReleased(){
@@ -57,6 +71,9 @@ void changeScreen(String screenType){
 }
 void changeScreen(String screenType, Object[] args){
   curScreen = new Screen(screenType, this, args);
+}
+void changeScreen(Screen target){
+  curScreen = target;
 }
 String loadConfig(String configOption){
   if(config == null){

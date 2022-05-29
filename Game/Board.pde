@@ -18,7 +18,7 @@ public class Board {
   static final int gameplayXOffset = 40;
   static final int gameplayYOffset = 40;
   static final int statZoneWidth = 240;
-  static final int fixBlockDelay = 30; // .5s delay for you to move the block after it hits
+  int fixBlockDelay = 30; // .5s delay for you to move the block after it hits
   int fixBlockTickCounter = -1; // -1: block fix timer not running
   int boardWidth = 10;
   int boardHeight = 20;
@@ -256,6 +256,7 @@ public class Board {
   }
   void onKeyPressed(int keyCode){
     // temp controls:
+    /* REMOVED
     if(keyCode == UP){
       originalGravityRate /= 2;
       if(originalGravityRate < 1){
@@ -267,6 +268,7 @@ public class Board {
       originalGravityRate *= 2;
       return;
     }
+    */
     if(keyCode == controls[MOVE_LEFT]){
       curBlock.tryMoveLeft();
       return;
@@ -296,6 +298,10 @@ public class Board {
     if(keyCode == controls[HOLD_PIECE]){
       tryHoldBlock();
       return;
+    }
+    if(keyCode == ESC){
+      parent.stopAllBoards();
+      parent.parent.changeScreen(SCREENTYPE_PAUSE, new Object[]{parent}); // pass screen itself as argument
     }
   }
   void onKeyReleased(int keyCode){
