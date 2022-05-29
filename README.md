@@ -59,4 +59,10 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Add texture loading functionality as well as a Java command-line tool to convert .png files into the custom binary texture format
 		- Allow customising keybindings from the config file
 	- Nicholas:
-
+		- NA
+- May 28, 2022 (Saturday)
+	- Frank:
+		- Add pause menu
+		- Add start new game menu
+		- Add main menu
+	- Nicholas:
