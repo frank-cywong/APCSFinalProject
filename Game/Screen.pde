@@ -6,8 +6,12 @@ public class Screen {
   Object[] args = null;
   int timer = 0;
   public Screen(String screentype, Game parent) {
+    this(screentype, parent, null);
+  }
+  public Screen(String screentype, Game parent, Object[] args){
     this.screentype = screentype;
     this.parent = parent;
+    this.args = args;
     hasBoards = (screentype == SCREENTYPE_GAME);
     boards = new Board[1];
     boards[0] = new Board(this);
@@ -19,13 +23,18 @@ public class Screen {
         fill(0x88000000);
         rect(0, 0, width, height);
         if(args == null){
-          args = (Object[])(new Object[] {0, false});
+          this.args = (Object[])(new Object[] {0, false});
         }
+      break;
+      case SCREENTYPE_PAUSE: // arg format: old screen
+        noStroke();
+        fill(0x88000000);
+        rect(0, 0, width, height);
+        if(args == null){
+          throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
+        }
+      break;
     }
-  }
-  public Screen(String screentype, Game parent, Object[] args){
-    this(screentype, parent);
-    this.args = args;
   }
   void onDraw() {
     if (hasBoards) {
@@ -59,6 +68,23 @@ public class Screen {
         fill(255);
         textSize(24);
         text("Start New Game", width / 2, height / 2 + 70);
+        break;
+      case SCREENTYPE_PAUSE:
+        noStroke();
+        fill(0xFF606060);
+        rect(width / 2 - 150, height / 2 - 105, 300, 210);
+        textAlign(CENTER, CENTER);
+        fill(255);
+        textSize(40);
+        text("Game Paused", width / 2, height / 2 - 70);
+        fill(#CC4449);
+        rect(width / 2 - 135, height / 2 - 20, 270, 50);
+        rect(width / 2 - 135, height / 2 + 40, 270, 50);
+        fill(255);
+        textSize(24);
+        text("Resume Game", width / 2, height / 2 + 2);
+        text("Return to Main Menu", width / 2, height / 2 + 62);
+        break;
     }
   }
   void onKeyPressed(int keyCode){
@@ -87,6 +113,16 @@ public class Screen {
         if(isInRange(mouseX, width / 2 - 120, width / 2 + 120) && isInRange(mouseY, height / 2 + 20, height / 2 + 120)){ // start new game button
           parent.changeScreen(SCREENTYPE_GAME);
         }
+        break;
+      case SCREENTYPE_PAUSE:
+        if(isInRange(mouseX, width / 2 - 135, width / 2 + 135) && isInRange(mouseY, height / 2 - 20, height / 2 + 30)){ // resume game button
+          ((Screen)args[0]).startAllBoards();
+          parent.changeScreen((Screen)args[0]);
+        }
+        if(isInRange(mouseX, width / 2 - 135, width / 2 + 135) && isInRange(mouseY, height / 2 + 40, height / 2 + 90)){ // return to main menu button
+          parent.changeScreen(SCREENTYPE_MAINMENU);
+        }
+        break;
     }
   }
   void updateBoardControls(){
@@ -115,6 +151,16 @@ public class Screen {
         }
         b.controls[j] = configInt;
       }
+    }
+  }
+  void stopAllBoards(){
+    for(Board b : boards){
+      b.stopped = true;
+    }
+  }
+  void startAllBoards(){
+    for(Board b : boards){
+      b.stopped = false;
     }
   }
 }

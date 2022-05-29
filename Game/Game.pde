@@ -12,6 +12,8 @@ static final int CONTROLS_COUNT = 7;
 
 static final String SCREENTYPE_GAME = "GAMESCREEN";
 static final String SCREENTYPE_END = "ENDSCREEN";
+static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
+static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
@@ -44,6 +46,9 @@ void draw(){
 }
 void keyPressed(){
   //System.out.println(keyCode);
+  if(key == ESC){ // Stop sketch from terminating when ESC is pressed
+    key = 0;
+  }
   curScreen.onKeyPressed(keyCode);
 }
 void keyReleased(){
@@ -57,6 +62,9 @@ void changeScreen(String screenType){
 }
 void changeScreen(String screenType, Object[] args){
   curScreen = new Screen(screenType, this, args);
+}
+void changeScreen(Screen target){
+  curScreen = target;
 }
 String loadConfig(String configOption){
   if(config == null){

@@ -297,6 +297,10 @@ public class Board {
       tryHoldBlock();
       return;
     }
+    if(keyCode == ESC){
+      parent.stopAllBoards();
+      parent.parent.changeScreen(SCREENTYPE_PAUSE, new Object[]{parent}); // pass screen itself as argument
+    }
   }
   void onKeyReleased(int keyCode){
     if(keyCode == controls[SOFT_DROP]){
