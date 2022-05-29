@@ -25,7 +25,7 @@ public class Screen {
         if(args == null){
           this.args = (Object[])(new Object[] {0, false});
         }
-      break;
+        break;
       case SCREENTYPE_PAUSE: // arg format: old screen
         noStroke();
         fill(0x88000000);
@@ -33,12 +33,17 @@ public class Screen {
         if(args == null){
           throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
         }
-      break;
+        break;
       case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay])
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
         this.args = new Object[]{30, 1, 30};
+        break;
+      case SCREENTYPE_MAINMENU: // no arguments at all
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height); //  // entirely fill screen
         break;
     }
   }
@@ -126,6 +131,22 @@ public class Screen {
         fill(255);
         text("Start New Game", width / 2, height - 55);
         break;
+      case SCREENTYPE_MAINMENU:
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height);
+        fill(255);
+        textAlign(CENTER, CENTER);
+        textSize(128);
+        text("TETRIS", width / 2, height / 4);
+        fill(#CC4449);
+        rect(width * 0.1, height * 0.5, width * 0.8, height * 0.25 - 30);
+        rect(width * 0.1, height * 0.75, width * 0.8, height * 0.25 - 30);
+        fill(255);
+        textSize(48);
+        text("Start New Game", width / 2, height * 0.625 - 20);
+        text("Settings", width / 2, height * 0.875 - 20);
+        break;
     }
   }
   void onKeyPressed(int keyCode){
@@ -160,7 +181,7 @@ public class Screen {
     }
   }
   // returns if x is in [a,b]
-  boolean isInRange(int x, int a, int b){
+  boolean isInRange(int x, double a, double b){
     return(a <= x && x <= b);
   }
   void onMousePressed(int mouseX, int mouseY){
@@ -236,6 +257,13 @@ public class Screen {
           args[2] = (Object)curFixDelay;
         }
         break;
+      case SCREENTYPE_MAINMENU:
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
+          parent.changeScreen(SCREENTYPE_NEWGAME);
+        }
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
+          parent.changeScreen(SCREENTYPE_SETTINGS);
+        }
     }
   }
   void updateBoardControls(){

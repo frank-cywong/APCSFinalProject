@@ -15,6 +15,7 @@ static final String SCREENTYPE_END = "ENDSCREEN";
 static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
 static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
+static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN"; // TODO
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
@@ -46,7 +47,7 @@ byte[] tileTexture;
 void setup(){
   config = localDataLoader.readConfigData();
   tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
-  changeScreen(SCREENTYPE_NEWGAME);
+  changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
 }
 void draw(){
