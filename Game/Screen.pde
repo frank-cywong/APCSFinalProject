@@ -147,6 +147,16 @@ public class Screen {
         text("Start New Game", width / 2, height * 0.625 - 20);
         text("Settings", width / 2, height * 0.875 - 20);
         break;
+      case SCREENTYPE_SETTINGS:
+        noStroke();
+        fill(#CC4449);
+        rect(width * 0.1, height * 0.5, width * 0.8, height * 0.25 - 30);
+        rect(width * 0.1, height * 0.75, width * 0.8, height * 0.25 - 30);
+        fill(255);
+        textSize(48);
+        text("SinglePlayer", width / 2, height * 0.625 - 20);
+        text("MultiPlayer", width / 2, height * 0.875 - 20);
+        break;
     }
   }
   void onKeyPressed(int keyCode){
