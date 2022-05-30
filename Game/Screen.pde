@@ -17,13 +17,13 @@ public class Screen {
     boards[0] = new Board(this);
     updateBoardControls();
     switch(screentype){
-      case SCREENTYPE_END: // arg format: [score, isThisANewHighScore]
+      case SCREENTYPE_END: // arg format: [score, isThisANewHighScore, previous game screen if exists (if null, just use default settings)]
         timer = 3600;
         noStroke();
         fill(0x88000000);
         rect(0, 0, width, height);
         if(args == null){
-          this.args = (Object[])(new Object[] {0, false});
+          this.args = (Object[])(new Object[] {0, false, null});
         }
         break;
       case SCREENTYPE_PAUSE: // arg format: old screen
@@ -67,18 +67,22 @@ public class Screen {
         }
         noStroke();
         fill(0xFF606060);
-        rect(width / 2 - 150, height / 2 - 150, 300, 300);
+        rect(width / 2 - 150, height / 2 - 190, 300, 380);
         textAlign(CENTER, CENTER);
         fill(255);
         textSize(48);
-        text("Game Over!", width / 2, height / 2 - 100);
+        text("Game Over!", width / 2, height / 2 - 140);
         textSize(32);
-        text(scoreText, width / 2, height / 2 - 30);
+        text(scoreText, width / 2, height / 2 - 70);
         fill(#CC4449);
-        rect(width / 2 - 120, height / 2 + 20, 240, 100);
+        rect(width / 2 - 130, height / 2 - 20, 260, 80);
         fill(255);
         textSize(24);
-        text("Start New Game", width / 2, height / 2 + 70);
+        text("Start New Game\n(with same settings)", width / 2, height / 2 + 16);
+        fill(#CC4449);
+        rect(width / 2 - 130, height / 2 + 80, 260, 80);
+        fill(255);
+        text("Return to Main Menu", width / 2, height / 2 + 116);
         break;
       case SCREENTYPE_PAUSE:
         noStroke();
@@ -200,8 +204,18 @@ public class Screen {
   void onMousePressed(int mouseX, int mouseY){
     switch(screentype){
       case SCREENTYPE_END:
-        if(isInRange(mouseX, width / 2 - 120, width / 2 + 120) && isInRange(mouseY, height / 2 + 20, height / 2 + 120)){ // start new game button
+        if(isInRange(mouseX, width / 2 - 130, width / 2 + 130) && isInRange(mouseY, height / 2 - 20, height / 2 + 60)){ // start new game button
           parent.changeScreen(SCREENTYPE_GAME);
+          if(args[2] != null){ // then assume args 2 is a valid screen
+            Screen copySettingsFrom = (Screen)(args[2]);
+            parent.curScreen.setBoardGravity(copySettingsFrom.boards[0].originalGravityRate);
+            parent.curScreen.setBoardBlockFixDelay(copySettingsFrom.boards[0].fixBlockDelay);
+            // TODO: MAKE PLAYER COUNT ALSO BE COPIED
+          }
+          return;
+        }
+        if(isInRange(mouseX, width / 2 - 130, width / 2 + 130) && isInRange(mouseY, height / 2 + 80, height / 2 + 160)){ // return to main menu button
+          parent.changeScreen(SCREENTYPE_MAINMENU);
         }
         break;
       case SCREENTYPE_PAUSE:
