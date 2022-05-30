@@ -66,3 +66,14 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Add start new game menu
 		- Add main menu
 	- Nicholas:
+		- NA
+- May 29, 2022 (Sunday)
+	- Frank:
+		- NA
+	- Nicholas:
+		- 
+- May 30, 2022 (Monday)
+	- Frank:
+		- Add return to main menu and start same game with previous configurations options to end game screen
+	- Nicholas:
+		-
