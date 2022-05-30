@@ -116,7 +116,7 @@ public class Board {
       highScore = score;
       parent.parent.setConfig(HIGHSCORE_DATA_CONFIG, Integer.toString(highScore));
     }
-    parent.parent.changeScreen(SCREENTYPE_END, (new Object[]{score, newHighScore}));
+    parent.parent.changeScreen(SCREENTYPE_END, (new Object[]{score, newHighScore, parent}));
   }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
     if(curBlock.doGravity()){ // sanity check
