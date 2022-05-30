@@ -15,6 +15,7 @@ static final String SCREENTYPE_END = "ENDSCREEN";
 static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
 static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
+static final String SCREENTYPE_MULTIGAME = "MULTIGAMESCREEN";
 static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN"; // TODO
 
 static final int BLOCK_START_X_POS = 4;
@@ -49,6 +50,7 @@ void setup(){
   tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
   changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
+  surface.setResizable(true);
 }
 void draw(){
   curScreen.onDraw();

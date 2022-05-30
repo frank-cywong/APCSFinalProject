@@ -38,7 +38,7 @@ public class Screen {
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30};
+        this.args = new Object[]{30, 1, 30, "WASD"};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
@@ -202,7 +202,8 @@ public class Screen {
         break;
       case SCREENTYPE_NEWGAME:
         if(isInRange(mouseX, 30, width - 30) && isInRange(mouseY, height - 85, height - 15)){ // start game button
-          parent.changeScreen(SCREENTYPE_GAME);
+          if((int)args[1]==1)parent.changeScreen(SCREENTYPE_GAME);
+          //if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); This is annoying, will do later
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
           // TODO: PLAYER COUNT CHANGE PUT HERE
@@ -258,12 +259,14 @@ public class Screen {
         }
         break;
       case SCREENTYPE_MAINMENU:
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
-          parent.changeScreen(SCREENTYPE_NEWGAME);
-        }
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
-          parent.changeScreen(SCREENTYPE_SETTINGS);
-        }
+          if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
+            parent.changeScreen(SCREENTYPE_NEWGAME);
+          }
+          if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
+            parent.changeScreen(SCREENTYPE_SETTINGS);
+          }
+        
+        
     }
   }
   void updateBoardControls(){
