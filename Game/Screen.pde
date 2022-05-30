@@ -147,6 +147,19 @@ public class Screen {
         text("Start New Game", width / 2, height * 0.625 - 20);
         text("Settings", width / 2, height * 0.875 - 20);
         break;
+      case SCREENTYPE_SETTINGS:
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height);
+        fill(255);
+        fill(#CC4449);
+        rect(width * 0.1, height * 0.2, width * 0.8, 50);
+        rect(width * 0.1, height * 0.5, width * 0.8, 50);
+        fill(255);
+        textSize(48);
+        text("SinglePlayer", width * 0.35, height * 0.25 - 20);
+        text("MultiPlayer", width * 0.35, height * 0.55 - 20);
+        break;
     }
   }
   void onKeyPressed(int keyCode){
@@ -202,7 +215,8 @@ public class Screen {
         break;
       case SCREENTYPE_NEWGAME:
         if(isInRange(mouseX, 30, width - 30) && isInRange(mouseY, height - 85, height - 15)){ // start game button
-          parent.changeScreen(SCREENTYPE_GAME);
+          if((int)args[1]==1)parent.changeScreen(SCREENTYPE_GAME);
+          //if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); This is annoying, will do later
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
           // TODO: PLAYER COUNT CHANGE PUT HERE
@@ -260,10 +274,23 @@ public class Screen {
       case SCREENTYPE_MAINMENU:
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
           parent.changeScreen(SCREENTYPE_NEWGAME);
+          delay(1000);
         }
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETTINGS);
+          delay(1000);
+
         }
+      case SCREENTYPE_SETTINGS:
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.2, height * 0.2 + 30)){ // start new game
+          parent.changeScreen(SCREENTYPE_GAME);
+
+        }
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height *0.5 + 30)){ // settings menu
+          parent.changeScreen(SCREENTYPE_MULTIGAME);
+        }
+        
+        
     }
   }
   void updateBoardControls(){
