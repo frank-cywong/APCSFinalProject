@@ -38,7 +38,7 @@ public class Screen {
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30, "WASD"};
+        this.args = new Object[]{30, 1, 30};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
