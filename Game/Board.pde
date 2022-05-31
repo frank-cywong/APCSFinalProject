@@ -227,8 +227,8 @@ public class Board {
     }
     curBlock = new Block(this,upcomingBlocks.remove());
     nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
-    System.out.println(nextBlockIcon.rawXPos);
-    System.out.println(topLeftX);
+    //System.out.println(nextBlockIcon.rawXPos);
+    //System.out.println(topLeftX);
   }
   void tryHoldBlock(){
     if(!heldBlockEnabled || heldBlockUsed){ // can't hold block
