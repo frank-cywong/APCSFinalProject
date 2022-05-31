@@ -39,6 +39,8 @@ static final int MAX_GRAVITY_FRAMES = 120;
 static final int MIN_FIX_BLOCK_DELAY = 0;
 static final int MAX_FIX_BLOCK_DELAY = 60;
 
+static final int LEVEL_SCORE_MULTIPLIER_CONSTANT = 30;
+
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();

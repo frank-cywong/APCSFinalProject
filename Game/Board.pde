@@ -10,7 +10,7 @@ public class Board {
   int originalGravityRate = 30; // For soft drop use
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
-  int levelScoreMultiplier = 1;
+  float levelScoreMultiplier = 1;
   final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
   int score = 0;
   static final int scorePerHardDropLine = 2;
