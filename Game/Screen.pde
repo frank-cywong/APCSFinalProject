@@ -164,6 +164,11 @@ public class Screen {
         text("SinglePlayer", width * 0.35, height * 0.25 - 20);
         text("MultiPlayer", width * 0.35, height * 0.55 - 20);
         break;
+      case SCREENTYPE_MULTIGAME:
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height);
+        fill(255);
     }
   }
   void onKeyPressed(int keyCode){
@@ -230,7 +235,7 @@ public class Screen {
       case SCREENTYPE_NEWGAME:
         if(isInRange(mouseX, 30, width - 30) && isInRange(mouseY, height - 85, height - 15)){ // start game button
           if((int)args[1]==1)parent.changeScreen(SCREENTYPE_GAME);
-          //if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); This is annoying, will do later
+          if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); //This is annoying, will do later
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
           // TODO: PLAYER COUNT CHANGE PUT HERE
