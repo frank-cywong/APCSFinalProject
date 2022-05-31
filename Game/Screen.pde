@@ -221,9 +221,15 @@ public class Screen {
     switch(screentype){
       case SCREENTYPE_END:
         if(isInRange(mouseX, width / 2 - 130, width / 2 + 130) && isInRange(mouseY, height / 2 - 20, height / 2 + 60)){ // start new game button
-          parent.changeScreen(SCREENTYPE_GAME);
-          if(args[2] != null){ // then assume args 2 is a valid screen
+          if(args[2] == null){
+            parent.changeScreen(SCREENTYPE_GAME);
+          } else { // then assume args 2 is a valid screen
             Screen copySettingsFrom = (Screen)(args[2]);
+            if(copySettingsFrom.boards.length >= 2){
+              parent.changeScreen(SCREENTYPE_MULTIGAME); 
+            } else {
+              parent.changeScreen(SCREENTYPE_GAME);
+            }
             parent.curScreen.setBoardGravity(copySettingsFrom.boards[0].originalGravityRate);
             parent.curScreen.setBoardBlockFixDelay(copySettingsFrom.boards[0].fixBlockDelay);
             // TODO: MAKE PLAYER COUNT ALSO BE COPIED

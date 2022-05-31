@@ -117,7 +117,7 @@ public class Board {
     }
   }
   void endGame(){
-    stopped = true;
+    parent.stopAllBoards();
     boolean newHighScore = score > highScore;
     if(newHighScore){
       highScore = score;
