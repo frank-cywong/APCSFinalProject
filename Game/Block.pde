@@ -114,23 +114,25 @@ public class Block {
       tiles[i].render(rawXPos + TILE_SIZE * locs[curr][rot][i][0], rawYPos - TILE_SIZE * locs[curr][rot][i][1]);
     }
   }
-  void tryMoveLeft(){
+  boolean tryMoveLeft(){
     for(Tile t : tiles){
       if(!t.canMoveTo(-1,0)){
-        return;
+        return false;
       }
     }
     boardXPos--;
     updateTilePos();
+    return true;
   }
-  void tryMoveRight(){
+  boolean tryMoveRight(){
     for(Tile t : tiles){
       if(!t.canMoveTo(1,0)){
-        return;
+        return false;
       }
     }
     boardXPos++;
     updateTilePos();
+    return true;
   }
   int hardDrop(){
     int rows = 0;

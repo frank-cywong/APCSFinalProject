@@ -10,6 +10,9 @@ public class Board {
   int originalGravityRate = 30; // For soft drop use
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
+  int DASTickCounter = 0;
+  int DASKeyPressed = 0;
+  boolean DASKeyRepeated = false; // has the das key pressed entered the "key repeat" stage
   float levelScoreMultiplier = 1;
   final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
   int score = 0;
@@ -45,6 +48,7 @@ public class Board {
       return;
     }
     // for now temp, just draw the block
+    DASProcess();
     stroke(100);
     fill(#404040);
     rect(topLeftX, topLeftY, gameplayXOffset * 2 + boardWidth * TILE_SIZE + statZoneWidth, gameplayYOffset * 2 + boardHeight * TILE_SIZE);
@@ -254,6 +258,60 @@ public class Board {
       curBlock.updateTilePos();
     }
   }
+  void DASKeyPress(int DASKey){
+    if(DASKey != DASKeyPressed){ // ignore OS autorepeating
+      DASKeyRepeated = false;
+      if(DASMoveBlock(DASKey)){
+        DASKeyPressed = DASKey;
+      } else {
+        DASKey = DAS_NO_KEY_PRESSED; // if failed to move, ignore
+      }
+    }
+  }
+  void DASKeyRelease(int DASKey){
+    if(DASKeyPressed == DASKey){
+      DASKeyPressed = DAS_NO_KEY_PRESSED;
+      DASTickCounter = 0;
+      DASKeyRepeated = false;
+    }
+  }
+  void DASProcess(){
+    if(DASKeyPressed == DAS_NO_KEY_PRESSED){ // sanity check for key releasing
+      DASTickCounter = 0;
+      DASKeyRepeated = false;
+      return;
+    }
+    DASTickCounter++;
+    if(DASKeyRepeated){
+      if(DASTickCounter >= DAS_KEY_REPEAT_FREQUENCY){
+        DASTickCounter = 0;
+        if(!DASMoveBlock(DASKeyPressed)){
+          DASKeyPressed = DAS_NO_KEY_PRESSED; // if failed to move, ignore
+        }
+      }
+    } else { // need DAS_KEY_REPEAT_DELAY until autorepeat kicks in
+      if(DASTickCounter >= DAS_KEY_REPEAT_DELAY){
+        DASKeyRepeated = true;
+        DASTickCounter = 0;
+        if(!DASMoveBlock(DASKeyPressed)){
+          DASKeyPressed = DAS_NO_KEY_PRESSED; // if failed to move, ignore
+        }
+      }
+    }
+  }
+  // Tries to move corresponding block and returns if move was successful
+  boolean DASMoveBlock(int DASKey){
+    if(curBlock == null){ // sanity check
+      return false;
+    }
+    switch(DASKey){
+      case DAS_MOVE_LEFT:
+        return curBlock.tryMoveLeft();
+      case DAS_MOVE_RIGHT:
+        return curBlock.tryMoveRight();
+    }
+    return false;
+  }
   void onKeyPressed(int keyCode){
     // temp controls:
     /* REMOVED
@@ -270,11 +328,13 @@ public class Board {
     }
     */
     if(keyCode == controls[MOVE_LEFT]){
-      curBlock.tryMoveLeft();
+      DASKeyPress(DAS_MOVE_LEFT);
+      //curBlock.tryMoveLeft();
       return;
     }
     if(keyCode == controls[MOVE_RIGHT]){
-      curBlock.tryMoveRight();
+      DASKeyPress(DAS_MOVE_RIGHT);
+      //curBlock.tryMoveRight();
       return;
     }
     if(keyCode == controls[ROTATE_CCW]){
@@ -305,11 +365,20 @@ public class Board {
     }
   }
   void onKeyReleased(int keyCode){
+    if(keyCode == controls[MOVE_LEFT]){
+      DASKeyRelease(DAS_MOVE_LEFT);
+      return;
+    }
+    if(keyCode == controls[MOVE_RIGHT]){
+      DASKeyRelease(DAS_MOVE_RIGHT);
+      return;
+    }
     if(keyCode == controls[SOFT_DROP]){
       if(isSoftDropping){
         isSoftDropping = false;
         gravityRate = originalGravityRate;
       }
+      return;
     }
   }
 }

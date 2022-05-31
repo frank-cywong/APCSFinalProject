@@ -41,6 +41,13 @@ static final int MAX_FIX_BLOCK_DELAY = 60;
 
 static final int LEVEL_SCORE_MULTIPLIER_CONSTANT = 30;
 
+static final int DAS_KEY_REPEAT_DELAY = 16; // frames
+static final int DAS_KEY_REPEAT_FREQUENCY = 3; // frames
+static final int DAS_NO_KEY_PRESSED = 0;
+static final int DAS_MOVE_LEFT = 1;
+static final int DAS_MOVE_RIGHT = 2;
+
+
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
