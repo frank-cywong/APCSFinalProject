@@ -48,6 +48,8 @@ static final int DAS_NO_KEY_PRESSED = 0;
 static final int DAS_MOVE_LEFT = 1;
 static final int DAS_MOVE_RIGHT = 2;
 
+static final int BASE_WIDTH = 640;
+static final int BASE_HEIGHT = 720;
 
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
@@ -79,15 +81,14 @@ void mousePressed(){
   curScreen.onMousePressed(mouseX, mouseY);
 }
 void changeScreen(String screenType){
-  curScreen = new Screen(screenType, this);
-  if(screenType.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(2*width,height);
-  }
+  changeScreen(screenType, null);
 }
 void changeScreen(String screenType, Object[] args){
   curScreen = new Screen(screenType, this, args);
   if(screenType.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(2*width,height);
+    surface.setSize(2*BASE_WIDTH,BASE_HEIGHT);
+  } else if (screenType.equals(SCREENTYPE_GAME) || screenType.equals(SCREENTYPE_NEWGAME) || screenType.equals(SCREENTYPE_MAINMENU) || screenType.equals(SCREENTYPE_SETTINGS)){
+    surface.setSize(BASE_WIDTH, BASE_HEIGHT);
   }
 }
 void changeScreen(Screen target){
