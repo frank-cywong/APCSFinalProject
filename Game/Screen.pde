@@ -1,5 +1,5 @@
 public class Screen {
-  boolean hasBoards = true;
+  boolean hasBoards = false;
   String screentype;
   Board[] boards;
   Game parent;
@@ -12,10 +12,21 @@ public class Screen {
     this.screentype = screentype;
     this.parent = parent;
     this.args = args;
-    hasBoards = (screentype == SCREENTYPE_GAME);
     boards = new Board[1];
-    boards[0] = new Board(this);
-    updateBoardControls();
+    boards[0] = new Board(this, 0, 0);
+    if(screentype == SCREENTYPE_GAME){
+      hasBoards = true;
+      boards = new Board[1];
+      boards[0] = new Board(this, 0, 0);
+      updateBoardControls();
+    }
+    if(screentype == SCREENTYPE_MULTIGAME){
+      hasBoards = true;
+      boards = new Board[2];
+      boards[0] = new Board(this, 0, 0);
+      boards[1] = new Board(this, Board.gameplayXOffset * 2 + boards[0].boardWidth * TILE_SIZE + Board.statZoneWidth, 0);
+      updateBoardControls();
+    }
     switch(screentype){
       case SCREENTYPE_END: // arg format: [score, isThisANewHighScore, previous game screen if exists (if null, just use default settings)]
         timer = 3600;

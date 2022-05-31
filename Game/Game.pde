@@ -81,20 +81,17 @@ void mousePressed(){
 void changeScreen(String screenType){
   curScreen = new Screen(screenType, this);
   if(screenType.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(2*width,2*height);
+    surface.setSize(2*width,height);
   }
 }
 void changeScreen(String screenType, Object[] args){
   curScreen = new Screen(screenType, this, args);
   if(screenType.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(2*width,2*height);
+    surface.setSize(2*width,height);
   }
 }
 void changeScreen(Screen target){
   curScreen = target;
-  if(target.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(2*width,2*height);
-  }
 }
 String loadConfig(String configOption){
   if(config == null){
