@@ -80,4 +80,4 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Make scores differ by gravity rate to incentivise higher difficulties, also allow finetuning gravity rate by 1 frame for values less than 1 line per 10 frames
 		- Implement DAS (Delayed autoshift) system so the rate blocks is independent of system key repeat settings
 	- Nicholas:
-		- \[FILL THIS IN\]
+		- Modified appearance of multiplayer mode
