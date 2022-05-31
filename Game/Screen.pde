@@ -253,7 +253,11 @@ public class Screen {
         }
         if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 70, 100)){ // decrease gravity
           int curGrav = (int)args[0];
-          curGrav -= 5;
+          if(curGrav > 10){
+            curGrav -= 5;
+          } else {
+            curGrav--;
+          }
           if(curGrav < MIN_GRAVITY_FRAMES){
             curGrav = MIN_GRAVITY_FRAMES;
           }
@@ -261,11 +265,14 @@ public class Screen {
         }
         if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 70, 100)){ // increase gravity
           int curGrav = (int)args[0];
-          curGrav += 5;
+          if(curGrav >= 10){
+            curGrav += 5;
+          } else {
+            curGrav++;
+          }
           if(curGrav > MAX_GRAVITY_FRAMES){
             curGrav = MAX_GRAVITY_FRAMES;
           }
-          curGrav -= (curGrav % 5); // make sure is mult of 5
           args[0] = (Object)curGrav;
         }
         if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 110, 140)){ // decrease fix block delay
@@ -348,7 +355,7 @@ public class Screen {
   void setBoardGravity(int g){
     for(Board b : boards){
       b.originalGravityRate = g;
-      b.levelScoreMultiplier = (float)LEVEL_SCORE_MULTIPLIER_CONSTANT / (float)g;
+      b.levelScoreMultiplier = max(LEVEL_SCORE_MAX_MULTIPLIER, (float)LEVEL_SCORE_MULTIPLIER_CONSTANT / (float)g);
       if(!b.isSoftDropping){
         b.gravityRate = g;
       }

@@ -40,6 +40,7 @@ static final int MIN_FIX_BLOCK_DELAY = 0;
 static final int MAX_FIX_BLOCK_DELAY = 60;
 
 static final int LEVEL_SCORE_MULTIPLIER_CONSTANT = 30;
+static final int LEVEL_SCORE_MAX_MULTIPLIER = 6;
 
 static final int DAS_KEY_REPEAT_DELAY = 16; // frames
 static final int DAS_KEY_REPEAT_FREQUENCY = 3; // frames
