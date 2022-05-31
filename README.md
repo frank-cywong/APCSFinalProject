@@ -71,7 +71,9 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 	- Frank:
 		- NA
 	- Nicholas:
-		- \[FILL THIS IN\]
+		- Created layout for settings menu
+		- Added multiplayer menu
+		- Allowed for resizability with surface methods
 - May 30, 2022 (Monday)
 	- Frank:
 		- Add return to main menu and start same game with previous configurations options to end game screen
