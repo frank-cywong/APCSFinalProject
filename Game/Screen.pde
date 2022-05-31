@@ -377,7 +377,7 @@ public class Screen {
   void setBoardGravity(int g){
     for(Board b : boards){
       b.originalGravityRate = g;
-      b.levelScoreMultiplier = max(LEVEL_SCORE_MAX_MULTIPLIER, (float)LEVEL_SCORE_MULTIPLIER_CONSTANT / (float)g);
+      b.levelScoreMultiplier = min(LEVEL_SCORE_MAX_MULTIPLIER, (float)LEVEL_SCORE_MULTIPLIER_CONSTANT / (float)g);
       if(!b.isSoftDropping){
         b.gravityRate = g;
       }
