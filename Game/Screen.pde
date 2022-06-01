@@ -56,6 +56,12 @@ public class Screen {
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
         break;
+      case SCREENTYPE_SETTINGS: // no arguments, but args used to store current selected player for config options ([cur sel player]), player # is 0 indexed
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height);
+        this.args = new Object[]{0};
+        break;
     }
   }
   void onDraw() {
@@ -189,6 +195,16 @@ public class Screen {
         fill(255);
         textAlign(CENTER, CENTER);
         text("Change Texture", width - 224, 58);
+        textAlign(LEFT, CENTER);
+        text("Edit Keybindings for Player", 30, 135);
+        fill(#CC4449);
+        rect(width - 60, 125, 30, 30);
+        rect(width - 150, 125, 30, 30);
+        textAlign(CENTER, CENTER);
+        fill(255);
+        text("<", width - 135, 135);
+        text(">", width - 45, 135);
+        text((Integer)(args[0]) + 1, width - 90, 135);
         break;
       case SCREENTYPE_MULTIGAME:
         noStroke();
@@ -376,6 +392,22 @@ public class Screen {
         if(isInRange(mouseX, width - 324, width - 124) && isInRange(mouseY, 30, 94)){ // change texture
           File f = new File(sketchPath("/textures"));
           selectInput("Select texture file", "fileSelected", f);
+        }
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 125, 155)){ // - player count
+          int curPlayerCount = (int)(args[0]);
+          curPlayerCount--;
+          if(curPlayerCount < MIN_PLAYER_COUNT - 1){
+            curPlayerCount = MIN_PLAYER_COUNT - 1;
+          }
+          args[0] = (Object)curPlayerCount;
+        }
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 125, 155)){ // + player count
+          int curPlayerCount = (int)(args[0]);
+          curPlayerCount++;
+          if(curPlayerCount > MAX_PLAYER_COUNT - 1){
+            curPlayerCount = MAX_PLAYER_COUNT - 1;
+          }
+          args[0] = (Object)curPlayerCount;
         }
         break;
     }
