@@ -10,6 +10,8 @@ static final int HOLD_PIECE = 6;
 
 static final int CONTROLS_COUNT = 7;
 
+static final String[] CONTROLS_TO_NAME = {"Move Left", "Move Right", "Rotate Counter-Clockwise", "Rotate Clockwise", "Hard Drop", "Soft Drop", "Hold Piece"};
+
 static final String SCREENTYPE_GAME = "GAMESCREEN";
 static final String SCREENTYPE_END = "ENDSCREEN";
 static final String SCREENTYPE_PAUSE = "PAUSESCREEN";

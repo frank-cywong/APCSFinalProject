@@ -205,6 +205,15 @@ public class Screen {
         text("<", width - 135, 135);
         text(">", width - 45, 135);
         text((Integer)(args[0]) + 1, width - 90, 135);
+        int menuStartOffset = 160;
+        int menuSizeLength = 30;
+        textSize(24);
+        for(int i = 0; i < CONTROLS_COUNT; i++){
+          textAlign(LEFT, CENTER);
+          text(CONTROLS_TO_NAME[i]+":", 30, menuStartOffset + menuSizeLength * i + 10);
+          textAlign(RIGHT, CENTER);
+          text(controlToText(parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[i], (int)(args[0]))), width - 120, menuStartOffset + menuSizeLength * i + 10);
+        }
         break;
       case SCREENTYPE_MULTIGAME:
         noStroke();
@@ -281,6 +290,21 @@ public class Screen {
   // returns if x is in [a,b]
   boolean isInRange(int x, double a, double b){
     return(a <= x && x <= b);
+  }
+  String controlToText(String control){
+    if(Character.isLetter(control.charAt(0))){
+      return control;
+    }
+    try{
+      int configInt = Integer.parseInt(control);
+      if(controlsMap.containsKey(configInt)){
+        return(controlsMap.get(configInt));
+      } else {
+        return("KEY " + configInt);
+      }
+    } catch (NumberFormatException e){
+      return "INVALID";
+    }
   }
   void onMousePressed(int mouseX, int mouseY){
     switch(screentype){
@@ -427,7 +451,7 @@ public class Screen {
           continue;
         }
         int configInt;
-        if(configOption.length() == 1){ // directly interpret it as a key
+        if(configOption.length() == 1 && Character.isLetter(configOption.charAt(0))){ // directly interpret it as a key
           configInt = configOption.charAt(0);
         } else {
           try {
