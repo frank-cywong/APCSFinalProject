@@ -5,6 +5,8 @@ public class Screen {
   Game parent;
   Object[] args = null;
   int timer = 0;
+  final int menuStartOffset = 160;
+  final int menuSizeLength = 30;
   public Screen(String screentype, Game parent) {
     this(screentype, parent, null);
   }
@@ -55,6 +57,12 @@ public class Screen {
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
+        break;
+      case SCREENTYPE_SETTINGS: // no arguments, but args used to store current selected player for config options & the keybinding being edited rn ([cur sel player, current editing]), player # is 0 indexed
+        noStroke();
+        fill(0xFF606060);
+        rect(0, 0, width, height);
+        this.args = new Object[]{0, -1};
         break;
     }
   }
@@ -163,17 +171,59 @@ public class Screen {
         text("Settings", width / 2, height * 0.875 - 20);
         break;
       case SCREENTYPE_SETTINGS:
+        String curTextureString = parent.loadConfig(TEXTURE_PACK_CONFIG);
+        // ignore file path
+        int cutOffPoint = max(curTextureString.lastIndexOf("/"), curTextureString.lastIndexOf("\\"));
+        if(cutOffPoint != -1){
+          curTextureString = curTextureString.substring(cutOffPoint + 1);
+        }
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height);
         fill(255);
+        textSize(24);
+        textAlign(LEFT, CENTER);
+        text("Current Texture:\n" + curTextureString, 30, 58);
+        Tile sampleTile = new Tile(null);
+        sampleTile.onBoard = false;
+        sampleTile.c = #0000FF;
+        sampleTile.updateTexture(parent.tileTexture);
+        sampleTile.render(width - 62, 30);
+        sampleTile.render(width - 94, 30);
+        sampleTile.render(width - 62, 62);
+        sampleTile.render(width - 94, 62);
         fill(#CC4449);
-        rect(width * 0.1, height * 0.2, width * 0.8, 50);
-        rect(width * 0.1, height * 0.5, width * 0.8, 50);
+        rect(width - 324, 30, 200, 64);
         fill(255);
-        textSize(48);
-        text("SinglePlayer", width * 0.35, height * 0.25 - 20);
-        text("MultiPlayer", width * 0.35, height * 0.55 - 20);
+        textAlign(CENTER, CENTER);
+        text("Change Texture", width - 224, 58);
+        textAlign(LEFT, CENTER);
+        text("Edit Keybindings for Player", 30, 135);
+        fill(#CC4449);
+        rect(width - 60, 125, 30, 30);
+        rect(width - 150, 125, 30, 30);
+        textAlign(CENTER, CENTER);
+        fill(255);
+        text("<", width - 135, 135);
+        text(">", width - 45, 135);
+        text((Integer)(args[0]) + 1, width - 90, 135);
+        textSize(24);
+        for(int i = 0; i < CONTROLS_COUNT; i++){
+          textAlign(LEFT, CENTER);
+          textSize(24);
+          text(CONTROLS_TO_NAME[i]+":", 30, menuStartOffset + menuSizeLength * i + 9);
+          textAlign(RIGHT, CENTER);
+          textSize((int)(args[1]) == i ? 18 : 24);
+          text((int)(args[1]) == i ? "TYPE NEW KEYBIND" : controlToText(parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[i], (int)(args[0]))), width - 120, menuStartOffset + menuSizeLength * i + 9);
+        }
+        for(int i = 0; i < CONTROLS_COUNT; i++){
+          fill(#CC4449);
+          rect(width - 110, menuStartOffset + menuSizeLength * i, 80, 24);
+          textAlign(CENTER, CENTER);
+          fill(255);
+          textSize(18);
+          text((int)(args[1]) == i ? "CANCEL" : "EDIT", width - 70, menuStartOffset + menuSizeLength * i + 9);
+        }
         break;
       case SCREENTYPE_MULTIGAME:
         noStroke();
@@ -203,6 +253,20 @@ public class Screen {
           return;
         }
         break;
+      case SCREENTYPE_SETTINGS:
+        if(keyCode == ESC){ // return to main menu
+          parent.changeScreen(SCREENTYPE_MAINMENU);
+          return;
+        }
+        if((int)args[1] != -1){ // editing keybinds
+          if(keyCode >= 'A' && keyCode <= 'Z'){
+            parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[(int)args[1]], ""+(char)(keyCode), (int)args[0]);
+          } else {
+            parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[(int)args[1]], ""+keyCode, (int)args[0]);
+          }
+          args[1] = -1;
+        }
+        break;
     }
   }
   void onKeyReleased(int keyCode){
@@ -213,9 +277,52 @@ public class Screen {
       return;
     }
   }
+  void fileSelected(File selected){
+    if(selected == null){
+      return;
+    }
+    switch(screentype){
+      case SCREENTYPE_SETTINGS:
+        // this is a texture file then, step 1: validate input
+        try{
+          DataLoader dataLoader = new DataLoader();
+          byte[] possibleTexture = dataLoader.loadTextureFromFile(ABSOLUTE_FILE_PATH_PREFIX + selected.getAbsolutePath());
+          boolean entirelyBlank = true;
+          for(int i = 0; i < 1024; i++){
+            if(possibleTexture[i] != (byte)(0xFF)){
+              entirelyBlank = false;
+              continue;
+            }
+          }
+          if(entirelyBlank){
+            throw new IllegalArgumentException("Texture file entirely blank");
+          }
+          // texture file is now (likely) valid
+          parent.setConfig(TEXTURE_PACK_CONFIG, ABSOLUTE_FILE_PATH_PREFIX + selected.getAbsolutePath());
+        } catch (Exception e){ // invalid texture file
+          // do nothing
+        }
+        break;
+    }
+  }
   // returns if x is in [a,b]
   boolean isInRange(int x, double a, double b){
     return(a <= x && x <= b);
+  }
+  String controlToText(String control){
+    if(control.length() == 1 && Character.isLetter(control.charAt(0))){
+      return control;
+    }
+    try{
+      int configInt = Integer.parseInt(control);
+      if(controlsMap.containsKey(configInt)){
+        return(controlsMap.get(configInt));
+      } else {
+        return("KEY " + configInt);
+      }
+    } catch (NumberFormatException e){
+      return "INVALID";
+    }
   }
   void onMousePressed(int mouseX, int mouseY){
     switch(screentype){
@@ -317,23 +424,50 @@ public class Screen {
       case SCREENTYPE_MAINMENU:
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
           parent.changeScreen(SCREENTYPE_NEWGAME);
-          delay(1000);
+          //delay(1000);
         }
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETTINGS);
-          delay(1000);
-
+          //delay(1000);
         }
       case SCREENTYPE_SETTINGS:
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.2, height * 0.2 + 30)){ // start new game
-          parent.changeScreen(SCREENTYPE_GAME);
-
+        if(isInRange(mouseX, width - 324, width - 124) && isInRange(mouseY, 30, 94)){ // change texture
+          File f = new File(sketchPath("/textures"));
+          selectInput("Select texture file", "fileSelected", f);
         }
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height *0.5 + 30)){ // settings menu
-          parent.changeScreen(SCREENTYPE_MULTIGAME);
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 125, 155)){ // - player count
+          int curPlayerCount = (int)(args[0]);
+          curPlayerCount--;
+          if(curPlayerCount < MIN_PLAYER_COUNT - 1){
+            curPlayerCount = MIN_PLAYER_COUNT - 1;
+          }
+          args[0] = (Object)curPlayerCount;
         }
-        
-        
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 125, 155)){ // + player count
+          int curPlayerCount = (int)(args[0]);
+          curPlayerCount++;
+          if(curPlayerCount > MAX_PLAYER_COUNT - 1){
+            curPlayerCount = MAX_PLAYER_COUNT - 1;
+          }
+          args[0] = (Object)curPlayerCount;
+        }
+        if(isInRange(mouseX, width - 110, width - 30)){ // select edit controls keybind
+          int selected = -1;
+          for(int i = 0; i < CONTROLS_COUNT; i++){
+            if(isInRange(mouseY, menuStartOffset + menuSizeLength * i, menuStartOffset + menuSizeLength * i + 24)){
+              selected = i;
+              break;
+            }
+          }
+          if(selected != -1){
+            if(selected == (int)args[1]){
+              args[1] = -1;
+            } else {
+              args[1] = selected;
+            }
+          }
+        }
+        break;
     }
   }
   void updateBoardControls(){
@@ -351,7 +485,7 @@ public class Screen {
           continue;
         }
         int configInt;
-        if(configOption.length() == 1){ // directly interpret it as a key
+        if(configOption.length() == 1 && Character.isLetter(configOption.charAt(0))){ // directly interpret it as a key
           configInt = configOption.charAt(0);
         } else {
           try {

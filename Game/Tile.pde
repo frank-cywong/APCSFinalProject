@@ -30,7 +30,9 @@ public class Tile {
     return output;
   }
   void updateTexture(){
-    byte[] texture = parent.parent.parent.tileTexture;
+    updateTexture(parent.parent.parent.tileTexture);
+  }
+  void updateTexture(byte[] texture){
     displayImage = createImage(TILE_SIZE, TILE_SIZE, RGB);
     displayImage.loadPixels();
     for(int i = 0; i < 1024; i++){
