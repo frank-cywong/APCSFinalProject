@@ -292,7 +292,7 @@ public class Screen {
     return(a <= x && x <= b);
   }
   String controlToText(String control){
-    if(Character.isLetter(control.charAt(0))){
+    if(control.length() == 1 && Character.isLetter(control.charAt(0))){
       return control;
     }
     try{
