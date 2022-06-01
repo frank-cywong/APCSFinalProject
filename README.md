@@ -81,3 +81,9 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Implement DAS (Delayed autoshift) system so the rate blocks is independent of system key repeat settings
 	- Nicholas:
 		- Modified appearance of multiplayer mode
+- May 31, 2022 (Tuesday)
+	- Frank:
+		- Speedrun getting multiplayer working before the demo branch deadline
+		- Fix various bugs with multiplayer and the score system
+	- Nicholas:
+		- NA
