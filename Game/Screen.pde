@@ -163,17 +163,32 @@ public class Screen {
         text("Settings", width / 2, height * 0.875 - 20);
         break;
       case SCREENTYPE_SETTINGS:
+        String curTextureString = parent.loadConfig(TEXTURE_PACK_CONFIG);
+        // ignore file path
+        int cutOffPoint = max(curTextureString.lastIndexOf("/"), curTextureString.lastIndexOf("\\"));
+        if(cutOffPoint != -1){
+          curTextureString = curTextureString.substring(cutOffPoint + 1);
+        }
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height);
         fill(255);
+        textSize(24);
+        textAlign(LEFT, CENTER);
+        text("Current Texture:\n" + curTextureString, 30, 58);
+        Tile sampleTile = new Tile(null);
+        sampleTile.onBoard = false;
+        sampleTile.c = #0000FF;
+        sampleTile.updateTexture(parent.tileTexture);
+        sampleTile.render(width - 62, 30);
+        sampleTile.render(width - 94, 30);
+        sampleTile.render(width - 62, 62);
+        sampleTile.render(width - 94, 62);
         fill(#CC4449);
-        rect(width * 0.1, height * 0.2, width * 0.8, 50);
-        rect(width * 0.1, height * 0.5, width * 0.8, 50);
+        rect(width - 324, 30, 200, 64);
         fill(255);
-        textSize(48);
-        text("SinglePlayer", width * 0.35, height * 0.25 - 20);
-        text("MultiPlayer", width * 0.35, height * 0.55 - 20);
+        textAlign(CENTER, CENTER);
+        text("Change Texture", width - 224, 58);
         break;
       case SCREENTYPE_MULTIGAME:
         noStroke();
@@ -203,6 +218,12 @@ public class Screen {
           return;
         }
         break;
+      case SCREENTYPE_SETTINGS:
+        if(keyCode == ESC){ // return to main menu
+          parent.changeScreen(SCREENTYPE_MAINMENU);
+          return;
+        }
+        break;
     }
   }
   void onKeyReleased(int keyCode){
@@ -211,6 +232,34 @@ public class Screen {
         b.onKeyReleased(keyCode);
       }
       return;
+    }
+  }
+  void fileSelected(File selected){
+    if(selected == null){
+      return;
+    }
+    switch(screentype){
+      case SCREENTYPE_SETTINGS:
+        // this is a texture file then, step 1: validate input
+        try{
+          DataLoader dataLoader = new DataLoader();
+          byte[] possibleTexture = dataLoader.loadTextureFromFile(ABSOLUTE_FILE_PATH_PREFIX + selected.getAbsolutePath());
+          boolean entirelyBlank = true;
+          for(int i = 0; i < 1024; i++){
+            if(possibleTexture[i] != (byte)(0xFF)){
+              entirelyBlank = false;
+              continue;
+            }
+          }
+          if(entirelyBlank){
+            throw new IllegalArgumentException("Texture file entirely blank");
+          }
+          // texture file is now (likely) valid
+          parent.setConfig(TEXTURE_PACK_CONFIG, ABSOLUTE_FILE_PATH_PREFIX + selected.getAbsolutePath());
+        } catch (Exception e){ // invalid texture file
+          // do nothing
+        }
+        break;
     }
   }
   // returns if x is in [a,b]
@@ -317,23 +366,18 @@ public class Screen {
       case SCREENTYPE_MAINMENU:
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
           parent.changeScreen(SCREENTYPE_NEWGAME);
-          delay(1000);
+          //delay(1000);
         }
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETTINGS);
-          delay(1000);
-
+          //delay(1000);
         }
       case SCREENTYPE_SETTINGS:
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.2, height * 0.2 + 30)){ // start new game
-          parent.changeScreen(SCREENTYPE_GAME);
-
+        if(isInRange(mouseX, width - 324, width - 124) && isInRange(mouseY, 30, 94)){ // change texture
+          File f = new File(sketchPath("/textures"));
+          selectInput("Select texture file", "fileSelected", f);
         }
-        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height *0.5 + 30)){ // settings menu
-          parent.changeScreen(SCREENTYPE_MULTIGAME);
-        }
-        
-        
+        break;
     }
   }
   void updateBoardControls(){

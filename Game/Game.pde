@@ -80,6 +80,9 @@ void keyReleased(){
 void mousePressed(){
   curScreen.onMousePressed(mouseX, mouseY);
 }
+void fileSelected(File f){
+  curScreen.fileSelected(f);
+}
 void changeScreen(String screenType){
   changeScreen(screenType, null);
 }
