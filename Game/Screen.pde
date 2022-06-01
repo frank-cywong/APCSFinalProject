@@ -5,6 +5,8 @@ public class Screen {
   Game parent;
   Object[] args = null;
   int timer = 0;
+  final int menuStartOffset = 160;
+  final int menuSizeLength = 30;
   public Screen(String screentype, Game parent) {
     this(screentype, parent, null);
   }
@@ -56,11 +58,11 @@ public class Screen {
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
         break;
-      case SCREENTYPE_SETTINGS: // no arguments, but args used to store current selected player for config options ([cur sel player]), player # is 0 indexed
+      case SCREENTYPE_SETTINGS: // no arguments, but args used to store current selected player for config options & the keybinding being edited rn ([cur sel player, current editing]), player # is 0 indexed
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height);
-        this.args = new Object[]{0};
+        this.args = new Object[]{0, -1};
         break;
     }
   }
@@ -205,14 +207,22 @@ public class Screen {
         text("<", width - 135, 135);
         text(">", width - 45, 135);
         text((Integer)(args[0]) + 1, width - 90, 135);
-        int menuStartOffset = 160;
-        int menuSizeLength = 30;
         textSize(24);
         for(int i = 0; i < CONTROLS_COUNT; i++){
           textAlign(LEFT, CENTER);
-          text(CONTROLS_TO_NAME[i]+":", 30, menuStartOffset + menuSizeLength * i + 10);
+          textSize(24);
+          text(CONTROLS_TO_NAME[i]+":", 30, menuStartOffset + menuSizeLength * i + 9);
           textAlign(RIGHT, CENTER);
-          text(controlToText(parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[i], (int)(args[0]))), width - 120, menuStartOffset + menuSizeLength * i + 10);
+          textSize((int)(args[1]) == i ? 18 : 24);
+          text((int)(args[1]) == i ? "TYPE NEW KEYBIND" : controlToText(parent.loadConfig(CONTROLS_CONFIG_LABEL_MAPPING[i], (int)(args[0]))), width - 120, menuStartOffset + menuSizeLength * i + 9);
+        }
+        for(int i = 0; i < CONTROLS_COUNT; i++){
+          fill(#CC4449);
+          rect(width - 110, menuStartOffset + menuSizeLength * i, 80, 24);
+          textAlign(CENTER, CENTER);
+          fill(255);
+          textSize(18);
+          text((int)(args[1]) == i ? "CANCEL" : "EDIT", width - 70, menuStartOffset + menuSizeLength * i + 9);
         }
         break;
       case SCREENTYPE_MULTIGAME:
@@ -247,6 +257,14 @@ public class Screen {
         if(keyCode == ESC){ // return to main menu
           parent.changeScreen(SCREENTYPE_MAINMENU);
           return;
+        }
+        if((int)args[1] != -1){ // editing keybinds
+          if(keyCode >= 'A' && keyCode <= 'Z'){
+            parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[(int)args[1]], ""+(char)(keyCode), (int)args[0]);
+          } else {
+            parent.setConfig(CONTROLS_CONFIG_LABEL_MAPPING[(int)args[1]], ""+keyCode, (int)args[0]);
+          }
+          args[1] = -1;
         }
         break;
     }
@@ -432,6 +450,22 @@ public class Screen {
             curPlayerCount = MAX_PLAYER_COUNT - 1;
           }
           args[0] = (Object)curPlayerCount;
+        }
+        if(isInRange(mouseX, width - 110, width - 30)){ // select edit controls keybind
+          int selected = -1;
+          for(int i = 0; i < CONTROLS_COUNT; i++){
+            if(isInRange(mouseY, menuStartOffset + menuSizeLength * i, menuStartOffset + menuSizeLength * i + 24)){
+              selected = i;
+              break;
+            }
+          }
+          if(selected != -1){
+            if(selected == (int)args[1]){
+              args[1] = -1;
+            } else {
+              args[1] = selected;
+            }
+          }
         }
         break;
     }

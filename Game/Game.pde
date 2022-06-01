@@ -87,7 +87,7 @@ void initControlsMap(){
   controlsMap.put(20, "CAPS LOCK");
 }
 void keyPressed(){
-  System.out.println(keyCode);
+  //System.out.println(keyCode);
   if(key == ESC && curScreen != null && !curScreen.screentype.equals(SCREENTYPE_MAINMENU)){ // Stop sketch from terminating when ESC is pressed unless sketch is on main menu
     key = 0;
   }
