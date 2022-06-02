@@ -10,6 +10,8 @@ public class Board {
   int originalGravityRate = 30; // For soft drop use
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
+  int deltaG = 1500; // change gravity every x ticks, if -1, never
+  int deltaGTickCounter = 0;
   int DASTickCounter = 0;
   int DASKeyPressed = 0;
   boolean DASKeyRepeated = false; // has the das key pressed entered the "key repeat" stage
@@ -86,6 +88,17 @@ public class Board {
         }
         int[] coords = boardCoordsToCoords(i, j);
         tiles[j][i].render(coords[0], coords[1]);
+      }
+    }
+    // process change in gravity
+    if(deltaG > 0 && originalGravityRate > 1){
+      deltaGTickCounter++;
+      if(deltaGTickCounter >= deltaG){
+        deltaGTickCounter = 0;
+        originalGravityRate--;
+        if(!isSoftDropping){
+          gravityRate--;
+        }
       }
     }
     // process gravity
