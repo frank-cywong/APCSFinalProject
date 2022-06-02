@@ -11,6 +11,16 @@ Project Description: A highly customisable tetris game implemented in Processing
 
 Project Prototype & Documentation Document: https://docs.google.com/document/d/1FvqMwXQw_hHUwzitesEkLyG_I1G-hj4IdTMZmRyejwg/edit
 
+## How to Compile and Run
+
+This project is built in Processing and requires that to be downloaded. It also requires the Processing Sound library which should be installed.
+
+To compile & run, load the sketch (inside `/Game/`) and press the run button in Processing.
+
+Default keybindings are visible in the settings menu. To exit most menus or pause the game, press the ESC button. The ESC button also exits the game entirely if you are on the main menu.
+
+To make custom textures from image files, look at `/tools/ImageToTexture/Guide_To_Textures.md` for more instructions.
+
 ## Development Log
 
 - May 23, 2022 (Monday)
@@ -87,3 +97,9 @@ Project Prototype & Documentation Document: https://docs.google.com/document/d/1
 		- Fix various bugs with multiplayer and the score system
 	- Nicholas:
 		- NA
+- June 1, 2022 (Wednesday)
+	- Frank:
+		- Make a settings menu that allows textures & keybindings to be customised in-game
+		- Update README.md's compile and run instructions
+	- Nicholas:
+		- FILL THIS IN
