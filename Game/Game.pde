@@ -1,3 +1,4 @@
+import processing.sound.*;
 static final int TILE_SIZE = 32;
 
 static final int MOVE_LEFT = 0;
