@@ -41,8 +41,12 @@ static final int MIN_GRAVITY_FRAMES = 1;
 static final int MAX_GRAVITY_FRAMES = 120;
 static final int MIN_FIX_BLOCK_DELAY = 0;
 static final int MAX_FIX_BLOCK_DELAY = 60;
-static final int MIN_DELTAG = 500;
-static final int MAX_DELTAG = 3600;
+static final int MIN_DELTAG = 100;
+static final int MAX_DELTAG = 1800;
+static final int MIN_DELTADELTAG = 0;
+static final int MAX_DELTADELTAG = 100;
+static final int MIN_MINIMUMGRAVITY = 1;
+static final int MAX_MINIMUMGRAVITY = 10;
 
 static final int LEVEL_SCORE_MULTIPLIER_CONSTANT = 30;
 static final int LEVEL_SCORE_MAX_MULTIPLIER = 6;

@@ -47,11 +47,11 @@ public class Screen {
           throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
         }
         break;
-      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames])
+      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames, amount to change delta G by every time its increased, minimum gravity])
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30, 1500};
+        this.args = new Object[]{30, 1, 30, 600, 40, 1};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
@@ -127,32 +127,44 @@ public class Screen {
         fill(255);
         textSize(24);
         text("Player Count:", 30, 40);
-        text("Gravity (1 tile / x frames):", 30, 80);
+        text("Gravity (1 line / x frames):", 30, 80);
         text("Additional Fix Block Delay (frames):", 30, 120); // block fix delay above gravity rate
         text("Decrease Gravity (every x frames):", 30, 160);
+        text("Slow Down Δg by (every Δg frames):", 30, 200);
+        text("Don't Decrease Gravity Below:", 30, 240);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(width - 60, 30, 30, 30);
         rect(width - 60, 70, 30, 30);
         rect(width - 60, 110, 30, 30);
         rect(width - 60, 150, 30, 30);
+        rect(width - 60, 190, 30, 30);
+        rect(width - 60, 230, 30, 30);
         rect(width - 150, 30, 30, 30);
         rect(width - 150, 70, 30, 30);
         rect(width - 150, 110, 30, 30);
         rect(width - 150, 150, 30, 30);
+        rect(width - 150, 190, 30, 30);
+        rect(width - 150, 230, 30, 30);
         fill(255);
         text(">", width - 45, 40);
         text(">", width - 45, 80);
         text(">", width - 45, 120);
         text(">", width - 45, 160);
+        text(">", width - 45, 200);
+        text(">", width - 45, 240);
         text("<", width - 135, 40);
         text("<", width - 135, 80);
         text("<", width - 135, 120);
         text("<", width - 135, 160);
+        text("<", width - 135, 200);
+        text("<", width - 135, 240);
         text(args[1].toString(), width - 90, 40);
         text(args[0].toString(), width - 90, 80);
         text(args[2].toString(), width - 90, 120);
         text((int)args[3] == -1 ? "∞" : args[3].toString(), width - 90, 160); // -1 means infinity
+        text(args[4].toString(), width - 90, 200);
+        text(args[5].toString(), width - 90, 240);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(30, height - 85, width - 60, 70);
@@ -369,6 +381,8 @@ public class Screen {
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
           parent.curScreen.setDeltaG((int)args[3]);
+          parent.curScreen.setDeltaDeltaG((int)args[4]);
+          parent.curScreen.setMinGrav((int)args[5]);
         }
         if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 30, 60)){ // decrease player count
           int curPlayerCount = (int)args[1];
@@ -447,6 +461,38 @@ public class Screen {
             }
             args[3] = (Object)curDeltaG;
           }
+        }
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 190, 220)){ // decrease ΔΔG
+          int curDeltaDeltaG = (int)args[4];
+          curDeltaDeltaG -= 5;
+          if(curDeltaDeltaG < MIN_DELTADELTAG){
+            curDeltaDeltaG = MIN_DELTADELTAG;
+          }
+          args[4] = (Object)curDeltaDeltaG;
+        }
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 190, 220)){ // increase ΔΔG
+          int curDeltaDeltaG = (int)args[4];
+          curDeltaDeltaG += 5;
+          if(curDeltaDeltaG > MAX_DELTADELTAG){
+            curDeltaDeltaG = MAX_DELTADELTAG;
+          }
+          args[4] = (Object)curDeltaDeltaG;
+        }
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 230, 260)){ // decrease min grav
+          int curMinGrav = (int)args[5];
+          curMinGrav--;
+          if(curMinGrav < MIN_MINIMUMGRAVITY){
+            curMinGrav = MIN_MINIMUMGRAVITY;
+          }
+          args[5] = (Object)curMinGrav;
+        }
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 230, 260)){ // increase min grav
+          int curMinGrav = (int)args[5];
+          curMinGrav++;
+          if(curMinGrav > MAX_MINIMUMGRAVITY){
+            curMinGrav = MAX_MINIMUMGRAVITY;
+          }
+          args[5] = (Object)curMinGrav;
         }
         break;
       case SCREENTYPE_MAINMENU:
@@ -553,6 +599,16 @@ public class Screen {
   void setDeltaG(int deltaG){
     for(Board b : boards){
       b.deltaG = deltaG;
+    }
+  }
+  void setDeltaDeltaG(int deltaDeltaG){
+    for(Board b : boards){
+      b.deltaDeltaG = deltaDeltaG;
+    }
+  }
+  void setMinGrav(int minGrav){
+    for(Board b : boards){
+      b.gravityLimit = minGrav;
     }
   }
 }
