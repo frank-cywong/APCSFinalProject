@@ -47,11 +47,11 @@ public class Screen {
           throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
         }
         break;
-      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay])
+      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames])
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30};
+        this.args = new Object[]{30, 1, 30, 1500};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
@@ -129,24 +129,30 @@ public class Screen {
         text("Player Count:", 30, 40);
         text("Gravity (1 tile / x frames):", 30, 80);
         text("Additional Fix Block Delay (frames):", 30, 120); // block fix delay above gravity rate
+        text("Decrease Gravity (every x frames):", 30, 160);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(width - 60, 30, 30, 30);
         rect(width - 60, 70, 30, 30);
         rect(width - 60, 110, 30, 30);
+        rect(width - 60, 150, 30, 30);
         rect(width - 150, 30, 30, 30);
         rect(width - 150, 70, 30, 30);
         rect(width - 150, 110, 30, 30);
+        rect(width - 150, 150, 30, 30);
         fill(255);
         text(">", width - 45, 40);
         text(">", width - 45, 80);
         text(">", width - 45, 120);
+        text(">", width - 45, 160);
         text("<", width - 135, 40);
         text("<", width - 135, 80);
         text("<", width - 135, 120);
+        text("<", width - 135, 160);
         text(args[1].toString(), width - 90, 40);
         text(args[0].toString(), width - 90, 80);
         text(args[2].toString(), width - 90, 120);
+        text((int)args[3] == -1 ? "∞" : args[3].toString(), width - 90, 160); // -1 means infinity
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(30, height - 85, width - 60, 70);
@@ -362,7 +368,7 @@ public class Screen {
           if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); //This is annoying, will do later
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
-          // TODO: PLAYER COUNT CHANGE PUT HERE
+          parent.curScreen.setDeltaG((int)args[3]);
         }
         if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 30, 60)){ // decrease player count
           int curPlayerCount = (int)args[1];
@@ -419,6 +425,28 @@ public class Screen {
             curFixDelay = MAX_FIX_BLOCK_DELAY;
           }
           args[2] = (Object)curFixDelay;
+        }
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 150, 180)){ // decrease delta G
+          int curDeltaG = (int)args[3];
+          if(curDeltaG == -1){
+            curDeltaG = MAX_DELTAG;
+          } else {
+            curDeltaG -= 100;
+            if(curDeltaG < MIN_DELTAG){
+              curDeltaG = MIN_DELTAG;
+            }
+          }
+          args[3] = (Object)curDeltaG;
+        }
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 150, 180)){ // increase delta G
+          int curDeltaG = (int)args[3];
+          if(curDeltaG != -1){
+            curDeltaG += 100;
+            if(curDeltaG > MAX_DELTAG){
+              curDeltaG = -1;
+            }
+            args[3] = (Object)curDeltaG;
+          }
         }
         break;
       case SCREENTYPE_MAINMENU:
@@ -520,6 +548,11 @@ public class Screen {
   void setBoardBlockFixDelay(int delay){
     for(Board b : boards){
       b.fixBlockDelay = delay;
+    }
+  }
+  void setDeltaG(int deltaG){
+    for(Board b : boards){
+      b.deltaG = deltaG;
     }
   }
 }
