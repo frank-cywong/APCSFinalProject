@@ -355,9 +355,11 @@ public class Screen {
             } else {
               parent.changeScreen(SCREENTYPE_GAME);
             }
-            parent.curScreen.setBoardGravity(copySettingsFrom.boards[0].originalGravityRate);
+            parent.curScreen.setBoardGravity(copySettingsFrom.boards[0].startGravityRate);
             parent.curScreen.setBoardBlockFixDelay(copySettingsFrom.boards[0].fixBlockDelay);
-            // TODO: MAKE PLAYER COUNT ALSO BE COPIED
+            parent.curScreen.setDeltaG(copySettingsFrom.boards[0].startDeltaG);
+            parent.curScreen.setDeltaDeltaG(copySettingsFrom.boards[0].deltaDeltaG);
+            parent.curScreen.setMinGrav(copySettingsFrom.boards[0].gravityLimit);
           }
           return;
         }
@@ -584,6 +586,7 @@ public class Screen {
   }
   void setBoardGravity(int g){
     for(Board b : boards){
+      b.startGravityRate = g;
       b.originalGravityRate = g;
       b.levelScoreMultiplier = min(LEVEL_SCORE_MAX_MULTIPLIER, (float)LEVEL_SCORE_MULTIPLIER_CONSTANT / (float)g);
       if(!b.isSoftDropping){
@@ -598,6 +601,7 @@ public class Screen {
   }
   void setDeltaG(int deltaG){
     for(Board b : boards){
+      b.startDeltaG = deltaG;
       b.deltaG = deltaG;
     }
   }

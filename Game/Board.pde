@@ -7,9 +7,11 @@ public class Board {
   Block nextBlockIcon;
   int topLeftX = 0;
   int topLeftY = 0;
+  int startGravityRate = 30; // for start new game with same settings
   int originalGravityRate = 30; // For soft drop use
   int gravityRate = 30; // one down move every 30 frames
   int gravityTickCounter = 0;
+  int startDeltaG = 600; // for start new game with same settings
   int deltaG = 600; // change gravity every x ticks, if -1, never
   int deltaGTickCounter = 0;
   int deltaDeltaG = 40;
