@@ -11,6 +11,8 @@ static final int HOLD_PIECE = 6;
 
 static final int CONTROLS_COUNT = 7;
 
+static final String[] CONTROLS_TO_NAME = {"Move Left", "Move Right", "Rotate Counter-Clockwise", "Rotate Clockwise", "Hard Drop", "Soft Drop", "Hold Piece"};
+
 static final String SCREENTYPE_GAME = "GAMESCREEN";
 static final String SCREENTYPE_END = "ENDSCREEN";
 static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
@@ -58,7 +60,10 @@ DataLoader localDataLoader = new DataLoader();
 
 byte[] tileTexture;
 
+static final HashMap<Integer, String> controlsMap = new HashMap<Integer, String>();
+
 void setup(){
+  initControlsMap();
   config = localDataLoader.readConfigData();
   tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
   changeScreen(SCREENTYPE_MAINMENU);
@@ -67,6 +72,20 @@ void setup(){
 }
 void draw(){
   curScreen.onDraw();
+}
+void initControlsMap(){
+  controlsMap.put(37, "LEFT ARROW");
+  controlsMap.put(38, "UP ARROW");
+  controlsMap.put(39, "RIGHT ARROW");
+  controlsMap.put(40, "DOWN ARROW");
+  controlsMap.put(32, "SPACE");
+  controlsMap.put(16, "SHIFT");
+  controlsMap.put(17, "CONTROL");
+  controlsMap.put(18, "ALT");
+  controlsMap.put(10, "ENTER");
+  controlsMap.put(8, "BACKSPACE");
+  controlsMap.put(9, "TAB");
+  controlsMap.put(20, "CAPS LOCK");
 }
 void keyPressed(){
   //System.out.println(keyCode);
@@ -80,6 +99,9 @@ void keyReleased(){
 }
 void mousePressed(){
   curScreen.onMousePressed(mouseX, mouseY);
+}
+void fileSelected(File f){
+  curScreen.fileSelected(f);
 }
 void changeScreen(String screenType){
   changeScreen(screenType, null);
