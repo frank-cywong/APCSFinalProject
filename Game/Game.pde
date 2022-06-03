@@ -19,7 +19,7 @@ static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
 static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
 static final String SCREENTYPE_MULTIGAME = "MULTIGAMESCREEN";
-static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN";
+static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN"; // TODO
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
@@ -41,6 +41,12 @@ static final int MIN_GRAVITY_FRAMES = 1;
 static final int MAX_GRAVITY_FRAMES = 120;
 static final int MIN_FIX_BLOCK_DELAY = 0;
 static final int MAX_FIX_BLOCK_DELAY = 60;
+static final int MIN_DELTAG = 100;
+static final int MAX_DELTAG = 1800;
+static final int MIN_DELTADELTAG = 0;
+static final int MAX_DELTADELTAG = 100;
+static final int MIN_MINIMUMGRAVITY = 1;
+static final int MAX_MINIMUMGRAVITY = 10;
 
 static final int LEVEL_SCORE_MULTIPLIER_CONSTANT = 30;
 static final int LEVEL_SCORE_MAX_MULTIPLIER = 6;
@@ -109,7 +115,7 @@ void changeScreen(String screenType){
 void changeScreen(String screenType, Object[] args){
   curScreen = new Screen(screenType, this, args);
   if(screenType.equals(SCREENTYPE_MULTIGAME)){
-    surface.setSize(3*BASE_WIDTH,BASE_HEIGHT);
+    surface.setSize(2*BASE_WIDTH,BASE_HEIGHT);
   } else if (screenType.equals(SCREENTYPE_GAME) || screenType.equals(SCREENTYPE_NEWGAME) || screenType.equals(SCREENTYPE_MAINMENU) || screenType.equals(SCREENTYPE_SETTINGS)){
     surface.setSize(BASE_WIDTH, BASE_HEIGHT);
   }
