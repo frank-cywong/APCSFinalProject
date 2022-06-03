@@ -103,3 +103,8 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Update README.md's compile and run instructions
 	- Nicholas:
 		- FILL THIS IN
+- June 2, 2022 (Thursday)
+	- Frank:
+		- Make gravity increase over time and allow for more complex gravity changes over time
+	- Nicholas:
+		- FILL THIS IN
