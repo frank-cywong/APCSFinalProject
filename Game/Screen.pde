@@ -47,11 +47,11 @@ public class Screen {
           throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
         }
         break;
-      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames, amount to change delta G by every time its increased, minimum gravity])
+      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames, amount to change delta G by every time its increased, minimum gravity, garbage enabled])
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30, 600, 40, 1};
+        this.args = new Object[]{30, 1, 30, 600, 40, 1, true};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
@@ -132,6 +132,7 @@ public class Screen {
         text("Decrease Gravity (every x frames):", 30, 160);
         text("Slow Down Δg by (every Δg frames):", 30, 200);
         text("Don't Decrease Gravity Below:", 30, 240);
+        text("[MULTIPLAYER] Garbage:", 30, 280);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(width - 60, 30, 30, 30);
@@ -140,12 +141,14 @@ public class Screen {
         rect(width - 60, 150, 30, 30);
         rect(width - 60, 190, 30, 30);
         rect(width - 60, 230, 30, 30);
+        rect(width - 60, 270, 30, 30);
         rect(width - 150, 30, 30, 30);
         rect(width - 150, 70, 30, 30);
         rect(width - 150, 110, 30, 30);
         rect(width - 150, 150, 30, 30);
         rect(width - 150, 190, 30, 30);
         rect(width - 150, 230, 30, 30);
+        rect(width - 150, 270, 30, 30);
         fill(255);
         text(">", width - 45, 40);
         text(">", width - 45, 80);
@@ -153,18 +156,21 @@ public class Screen {
         text(">", width - 45, 160);
         text(">", width - 45, 200);
         text(">", width - 45, 240);
+        text(">", width - 45, 280);
         text("<", width - 135, 40);
         text("<", width - 135, 80);
         text("<", width - 135, 120);
         text("<", width - 135, 160);
         text("<", width - 135, 200);
         text("<", width - 135, 240);
+        text("<", width - 135, 280);
         text(args[1].toString(), width - 90, 40);
         text(args[0].toString(), width - 90, 80);
         text(args[2].toString(), width - 90, 120);
         text((int)args[3] == -1 ? "∞" : args[3].toString(), width - 90, 160); // -1 means infinity
         text(args[4].toString(), width - 90, 200);
         text(args[5].toString(), width - 90, 240);
+        text((boolean)args[6] ? "On" : "Off", width - 90, 280);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(30, height - 85, width - 60, 70);
@@ -385,6 +391,7 @@ public class Screen {
           parent.curScreen.setDeltaG((int)args[3]);
           parent.curScreen.setDeltaDeltaG((int)args[4]);
           parent.curScreen.setMinGrav((int)args[5]);
+          parent.curScreen.setGarbage((boolean)args[6]);
         }
         if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 30, 60)){ // decrease player count
           int curPlayerCount = (int)args[1];
@@ -495,6 +502,11 @@ public class Screen {
             curMinGrav = MAX_MINIMUMGRAVITY;
           }
           args[5] = (Object)curMinGrav;
+        }
+        if((isInRange(mouseX, width - 150, width - 120) || isInRange(mouseX, width - 60, width - 30)) && isInRange(mouseY, 270, 300)){ // toggle garbage
+          boolean curGarbageEnabled = (boolean)args[6];
+          curGarbageEnabled = !curGarbageEnabled;
+          args[6] = (Object)curGarbageEnabled;
         }
         break;
       case SCREENTYPE_MAINMENU:
@@ -613,6 +625,18 @@ public class Screen {
   void setMinGrav(int minGrav){
     for(Board b : boards){
       b.gravityLimit = minGrav;
+    }
+  }
+  void setGarbage(boolean garbageEnabled){
+    for(Board b : boards){
+      b.garbageEnabled = garbageEnabled;
+    }
+  }
+  void sendGarbage(int lines, Board avoid){
+    for(Board b : boards){
+      if(b != avoid){
+        b.receiveGarbage(lines);
+      }
     }
   }
 }

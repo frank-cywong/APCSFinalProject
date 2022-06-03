@@ -19,6 +19,7 @@ public class Board {
   int DASTickCounter = 0;
   int DASKeyPressed = 0;
   boolean DASKeyRepeated = false; // has the das key pressed entered the "key repeat" stage
+  boolean garbageEnabled = true;
   float levelScoreMultiplier = 1;
   final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
   int score = 0;
@@ -45,7 +46,7 @@ public class Board {
     this.topLeftX = topLeftX;
     this.topLeftY = topLeftY;
     generateNewBlock();
-    tiles = new Tile[boardHeight + 5][boardWidth]; // 0th row is bottom etc. 5 hidden rows to allow for drop
+    tiles = new Tile[boardHeight + 20][boardWidth]; // 0th row is bottom etc. 20 hidden rows to allow for drop & garbage space
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     // default for 2nd player: left arrow for left, right arrow for right, ctrl for CCW, up for CW, space for hard drop, down for soft drop, shift for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
@@ -232,6 +233,7 @@ public class Board {
         tiles[row][col] = null;
       }
     }
+    parent.sendGarbage(garbageAmountByLinesCleared[rowsToClear.size() - 1], this);
   }
   void generateNewBlock(){ // generates new block
     if(upcomingBlocks.size() <= 1){ // make new blocks first
@@ -402,6 +404,37 @@ public class Board {
         gravityRate = originalGravityRate;
       }
       return;
+    }
+    /*
+    if(keyCode == 'L'){
+      receiveGarbage(1);
+    }
+    */
+  }
+  void receiveGarbage(int lineCount){
+    if(!garbageEnabled){
+      return;
+    }
+    for(int row = tiles.length - 1; row >= lineCount; row--){
+      for(int col = 0; col < tiles[0].length; col++){
+        tiles[row][col] = tiles[row - lineCount][col];
+      }
+    }
+    curBlock.boardYPos += lineCount;
+    curBlock.updateTilePos();
+    for(int row = lineCount - 1; row >= 0; row--){ // new garbage rows
+      int ignoredCol = (int)(random(tiles[row].length));
+      for(int col = 0; col < tiles[row].length; col++){
+        if(col == ignoredCol){
+          tiles[row][col] = null;
+        } else {
+          Tile t = new Tile(this);
+          t.c = #808080;
+          t.updateBoardPos(col, row);
+          tiles[row][col] = t; // just in case
+          t.updateTexture();
+        }
+      }
     }
   }
 }
