@@ -108,3 +108,13 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Make gravity increase over time and allow for more complex gravity changes over time
 	- Nicholas:
 		- FILL THIS IN
+- June 3, 2022 (Friday)
+	- Frank:
+		- Add garbage mechanism for multiplayer games
+	- Nicholas:
+		- FILL THIS IN
+- June 4, 2022 (Saturday)
+	- Frank:
+		- NA
+	- Nicholas:
+		- FILL THIS IN
