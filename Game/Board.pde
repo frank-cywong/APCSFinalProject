@@ -20,6 +20,7 @@ public class Board {
   int DASKeyPressed = 0;
   boolean DASKeyRepeated = false; // has the das key pressed entered the "key repeat" stage
   boolean garbageEnabled = true;
+  boolean ghostBlocksEnabled = true;
   float levelScoreMultiplier = 1;
   final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
   int score = 0;
@@ -45,8 +46,8 @@ public class Board {
     this.parent = parent;
     this.topLeftX = topLeftX;
     this.topLeftY = topLeftY;
-    generateNewBlock();
     tiles = new Tile[boardHeight + 20][boardWidth]; // 0th row is bottom etc. 20 hidden rows to allow for drop & garbage space
+    generateNewBlock();
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
     // default for 2nd player: left arrow for left, right arrow for right, ctrl for CCW, up for CW, space for hard drop, down for soft drop, shift for hold
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
@@ -170,6 +171,9 @@ public class Board {
       a[index] = row;
       index++;
     }
+    if(curBlock.ghostBlock != null){
+      curBlock.deleteGhostBlock(true);
+    }
     tryClearRows(a);
     fixBlockTickCounter = -1;
     for(Tile t : curBlock.tiles){
@@ -247,6 +251,9 @@ public class Board {
       }
     }
     curBlock = new Block(this,upcomingBlocks.remove());
+    if(ghostBlocksEnabled){
+      curBlock.createGhostBlock();
+    }
     nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
     //System.out.println(nextBlockIcon.rawXPos);
     //System.out.println(topLeftX);
@@ -260,11 +267,14 @@ public class Board {
     heldBlock = curBlock;
     curBlock = temp;
     heldBlock.boardDoesRendering = false;
+    if(heldBlock.ghostBlock != null){
+      heldBlock.deleteGhostBlock(false);
+    }
     for (int i = 0; i < heldBlock.locs[heldBlock.curr][heldBlock.rot].length; i++) {
       //System.out.println("Updating tile " + i + " to (" + (boardXPos + locs[i][0]) + ", " + (boardYPos + locs[i][1]) + ")");
       Tile t = heldBlock.tiles[i];
-      if(tiles[t.boardYPos][t.boardXPos] == t){
-        tiles[t.boardYPos][t.boardXPos] = null;
+      if(tiles[t.getBoardYPos()][t.getBoardXPos()] == t){
+        tiles[t.getBoardYPos()][t.getBoardXPos()] = null;
       }
       t.onBoard = false;
     }
@@ -279,6 +289,9 @@ public class Board {
       curBlock.boardDoesRendering = true;
       for(Tile t : curBlock.tiles){
         t.onBoard = true;
+      }
+      if(ghostBlocksEnabled){
+        curBlock.createGhostBlock();
       }
       curBlock.updateTilePos();
     }
