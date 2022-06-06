@@ -422,8 +422,8 @@ public class Board {
     }
     curBlock.boardYPos += lineCount;
     curBlock.updateTilePos();
+    int ignoredCol = (int)(random(tiles[0].length));
     for(int row = lineCount - 1; row >= 0; row--){ // new garbage rows
-      int ignoredCol = (int)(random(tiles[row].length));
       for(int col = 0; col < tiles[row].length; col++){
         if(col == ignoredCol){
           tiles[row][col] = null;
