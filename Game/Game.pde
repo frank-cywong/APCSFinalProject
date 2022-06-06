@@ -57,6 +57,8 @@ static final int DAS_NO_KEY_PRESSED = 0;
 static final int DAS_MOVE_LEFT = 1;
 static final int DAS_MOVE_RIGHT = 2;
 
+static final int[] garbageAmountByLinesCleared = {0, 1, 2, 4};
+
 static final int BASE_WIDTH = 640;
 static final int BASE_HEIGHT = 720;
 
