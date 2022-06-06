@@ -67,6 +67,7 @@ private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
 
 byte[] tileTexture;
+byte[] ghostTexture;
 
 static final HashMap<Integer, String> controlsMap = new HashMap<Integer, String>();
 
@@ -74,6 +75,7 @@ void setup(){
   initControlsMap();
   config = localDataLoader.readConfigData();
   tileTexture = localDataLoader.loadTextureFromFile(config.get(TEXTURE_PACK_CONFIG));
+  ghostTexture = localDataLoader.loadTextureFromFile("textures/ghostDefault.texture");
   changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
   surface.setResizable(true);

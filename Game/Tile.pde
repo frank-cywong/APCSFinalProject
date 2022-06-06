@@ -53,6 +53,9 @@ public class Tile {
     return(toTest == null || toTest.parentBlock == this.parentBlock);
   }
   public void updateBoardPos(int newBoardXPos, int newBoardYPos){
+    updateBoardPos(newBoardXPos, newBoardYPos, false);
+  }
+  public void updateBoardPos(int newBoardXPos, int newBoardYPos, boolean noOverRender){
     if(!onBoard){
       return; // do nothing
     }
@@ -67,7 +70,9 @@ public class Tile {
     }
     boardXPos = newBoardXPos;
     boardYPos = newBoardYPos;
-    parent.tiles[boardYPos][boardXPos] = this;
+    if(!noOverRender){
+      parent.tiles[boardYPos][boardXPos] = this;
+    }
   }
   public int getBoardXPos(){ // if boardXPos and boardYPos are modified erroneously its very bad, hence getter & setter methods
     return boardXPos;
