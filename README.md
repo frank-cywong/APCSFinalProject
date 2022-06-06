@@ -118,3 +118,8 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- NA
 	- Nicholas:
 		- FILL THIS IN
+- June 5, 2022 (Sunday)
+	- Frank:
+		- NA
+	- Nicholas:
+		- FILL THIS IN
