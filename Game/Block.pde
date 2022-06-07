@@ -2,6 +2,7 @@ public class Block {
   int boardXPos = BLOCK_START_X_POS;
   int boardYPos = BLOCK_START_Y_POS;
   Board parent;
+  Block ghostBlock;
   boolean boardDoesRendering = true;
   int rawXPos = 0; // used only if boardDoesRendering is false, represents top left corner of "center"
   int rawYPos = 0;
@@ -85,13 +86,16 @@ public class Block {
     boardXPos = -10;
     boardYPos = -10;
   }
-  void updateTilePos() {
+  void updateTilePos(){
+    updateTilePos(false);
+  }
+  void updateTilePos(boolean noOverRender) {
     if(!boardDoesRendering){ // tiles shouldnt be rendered by board
       return;
     }
     for (int i = 0; i < locs[curr][rot].length; i++) {
       //System.out.println("Updating tile " + i + " to (" + (boardXPos + locs[i][0]) + ", " + (boardYPos + locs[i][1]) + ")");
-      tiles[i].updateBoardPos(boardXPos + locs[curr][rot][i][0], boardYPos + locs[curr][rot][i][1]);
+      tiles[i].updateBoardPos(boardXPos + locs[curr][rot][i][0], boardYPos + locs[curr][rot][i][1], noOverRender);
     }
   }
   boolean doGravity(){
@@ -114,6 +118,53 @@ public class Block {
       tiles[i].render(rawXPos + TILE_SIZE * locs[curr][rot][i][0], rawYPos - TILE_SIZE * locs[curr][rot][i][1]);
     }
   }
+  void createGhostBlock(){
+    ghostBlock = new Block(parent, curr);
+    for(Tile t : ghostBlock.tiles){
+      t.parentBlock = this; // to prevent collisions
+      t.updateTexture(parent.parent.parent.ghostTexture);
+    }
+    ghostBlock.updateTilePos();
+    updateGhostBlock();
+  }
+  void updateGhostBlock(){
+    if(ghostBlock == null){
+      return;
+    }
+    ghostBlock.boardXPos = boardXPos;
+    ghostBlock.boardYPos = boardYPos;
+    ghostBlock.rot = rot;
+    ghostBlock.updateTilePos(true);
+    int moveDown = -1;
+    while(true){
+      boolean failure = false;
+      for(Tile t: ghostBlock.tiles){
+        if(!t.canMoveTo(0, moveDown)){
+          failure = true;
+        }
+      }
+      if(failure){
+        moveDown++;
+        break;
+      }
+      moveDown--;
+    }
+    ghostBlock.boardYPos += moveDown;
+    ghostBlock.updateTilePos();
+  }
+  void deleteGhostBlock(boolean replaceWithMain){
+    if(ghostBlock == null){
+      return;
+    }
+    for(int i = 0; i < ghostBlock.tiles.length; i++){
+      Tile t = ghostBlock.tiles[i];
+      if(parent.tiles[t.getBoardYPos()][t.getBoardXPos()] == t){
+        parent.tiles[t.getBoardYPos()][t.getBoardXPos()] = (replaceWithMain ? tiles[i] : null);
+      }
+      ghostBlock.tiles[i] = null;
+    }
+    ghostBlock = null;
+  }
   boolean tryMoveLeft(){
     for(Tile t : tiles){
       if(!t.canMoveTo(-1,0)){
@@ -121,6 +172,7 @@ public class Block {
       }
     }
     boardXPos--;
+    updateGhostBlock();
     updateTilePos();
     return true;
   }
@@ -131,6 +183,7 @@ public class Block {
       }
     }
     boardXPos++;
+    updateGhostBlock();
     updateTilePos();
     return true;
   }
@@ -177,6 +230,7 @@ public class Block {
     rot = newRot;
     boardXPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][0];
     boardYPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][1];
+    updateGhostBlock();
     updateTilePos();
   }
 }
