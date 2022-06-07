@@ -30,13 +30,29 @@ public class Screen {
       updateBoardControls();
     }
     switch(screentype){
-      case SCREENTYPE_END: // arg format: [score, isThisANewHighScore, previous game screen if exists (if null, just use default settings)]
+      case SCREENTYPE_END: // arg format: [score, isThisANewHighScore, previous game screen if exists (if null, just use default settings)] - but highscore checking done here
         timer = 3600;
         noStroke();
         fill(0x88000000);
         rect(0, 0, width, height);
         if(args == null){
           this.args = (Object[])(new Object[] {0, false, null});
+        }
+        this.args = args;
+        if(this.args[2] != null){
+          Screen temp = (Screen)this.args[2];
+          int highScore = Integer.parseInt(parent.loadConfig(HIGHSCORE_DATA_CONFIG));
+          int curMaxScore = 0;
+          for(Board b : temp.boards){
+            if(b.score > curMaxScore){
+              curMaxScore = b.score;
+            }
+          }
+          if(curMaxScore > highScore){
+            this.args[1] = (Object)(true);
+            parent.setConfig(HIGHSCORE_DATA_CONFIG, ""+curMaxScore);
+          }
+          this.args[0] = (Object)(curMaxScore);
         }
         break;
       case SCREENTYPE_PAUSE: // arg format: old screen
