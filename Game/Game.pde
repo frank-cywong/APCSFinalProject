@@ -1,5 +1,7 @@
 import processing.sound.*;
-static SoundFile file;
+static SoundFile clear12;
+static SoundFile clear3;
+static SoundFile clear4;
 static final int TILE_SIZE = 32;
 
 static final int MOVE_LEFT = 0;
@@ -79,7 +81,9 @@ void setup(){
   ghostTexture = localDataLoader.loadTextureFromFile("textures/ghostDefault.texture");
   changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
-  file = new SoundFile(this,"se_game_double.wav");
+  clear12 = new SoundFile(this,"se_game_double.wav");
+  clear3 = new SoundFile(this,"se_game_triple.wav");
+  clear4 = new SoundFile(this,"se_game_tetris.wav");
   surface.setResizable(true);
 }
 void draw(){

@@ -232,7 +232,16 @@ public class Board {
         tiles[row][col] = null;
       }
     }
-    Game.file.play();
+    if (rowsToClear.size()<=2){
+      Game.clear12.play();
+    }
+    else if (rowsToClear.size()<4){
+      Game.clear3.play();
+    }
+    else if(rowsToClear.size()==4){
+      Game.clear4.play();
+    }
+    
     parent.sendGarbage(garbageAmountByLinesCleared[rowsToClear.size() - 1], this);
   }
   void generateNewBlock(){ // generates new block
