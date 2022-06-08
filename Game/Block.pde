@@ -14,6 +14,20 @@ public class Block {
   static final int T_PIECE = 5;
   static final int Z_PIECE = 6;
   static final int BLOCK_TYPE_COUNT = 7;
+  String lastMove = "";
+  static final String LAST_MOVE_GRAVITY = "LASTMOVEGRAVITY";
+  static final String LAST_MOVE_LEFT = "LASTMOVELEFT";
+  static final String LAST_MOVE_RIGHT = "LASTMOVERIGHT";
+  static final String LAST_MOVE_ROTATE = "LASTMOVEROT"; // format LASTMOVEROT[rotIndex]KICK[wallkick]
+  // Indexes: [i][X,Y]
+  final int[][] T_PIECE_CORNER_LOCS = {{-1, 1}, {1, 1}, {1, -1}, {-1, -1}};
+  // Indexes: [ROT][is i-th corner FRONT/BACK]
+  /* - CORNER ORDER
+  0x1
+  xxx
+  3x2
+  */
+  final boolean[][] T_PIECE_ROT_INFRONT = {{true, true, false, false}, {false, true, true, false}, {false, false, true, true}, {true, false, false, true}};
   // Indexes: [PIECE][ROT][TILE][X,Y]
   int[][][][] locs = {{{{-1, 0}, {0, 0}, {1, 0}, {2, 0}}, // I piece -1 0, 0 0, 1 0, 2 0
                    {{1, 1}, {1, 0}, {1, -1}, {1, -2}},
@@ -107,6 +121,7 @@ public class Block {
     }
     boardYPos--;
     updateTilePos();
+    lastMove = LAST_MOVE_GRAVITY;
     return true;
   }
   void render() {
@@ -117,6 +132,44 @@ public class Block {
     for(int i = 0; i < tiles.length; i++){
       tiles[i].render(rawXPos + TILE_SIZE * locs[curr][rot][i][0], rawYPos - TILE_SIZE * locs[curr][rot][i][1]);
     }
+  }
+  int checkTSpinStatus(){
+    if(curr != T_PIECE){ // can't t-spin if its not a t piece
+      return TSPIN_NONE;
+    }
+    //System.out.println("LASTMOVE: " + lastMove);
+    if(!lastMove.substring(0, LAST_MOVE_ROTATE.length()).equals(LAST_MOVE_ROTATE)){ // last move must be a rotation
+      return TSPIN_NONE;
+    }
+    int frontMinoCount = 0;
+    int backMinoCount = 0;
+    for(int i = 0; i < T_PIECE_CORNER_LOCS.length; i++){
+      int checkX = boardXPos + T_PIECE_CORNER_LOCS[i][0];
+      int checkY = boardYPos + T_PIECE_CORNER_LOCS[i][1];
+      if(checkX >= 0 && checkY >= 0 && checkY < parent.tiles.length && checkX < parent.tiles[0].length){
+        if(parent.tiles[checkY][checkX] != null){
+          if(T_PIECE_ROT_INFRONT[rot][i]){
+            frontMinoCount++;
+          } else {
+            backMinoCount++;
+          }
+        }
+      } else { // if hit wall, must be back
+        backMinoCount++;
+      }
+    }
+    //System.out.println("FRONT COUNT: " + frontMinoCount);
+    //System.out.println("BACK COUNT: " + backMinoCount);
+    if(frontMinoCount == 2 && backMinoCount >= 1){
+      return TSPIN_FULL;
+    }
+    if(frontMinoCount == 1 && backMinoCount == 2){
+      if(lastMove.charAt(lastMove.length() - 1) == '4'){ // if last wallkick type
+        return TSPIN_FULL;
+      }
+      return TSPIN_MINI;
+    }
+    return TSPIN_NONE;
   }
   void createGhostBlock(){
     ghostBlock = new Block(parent, curr);
@@ -174,6 +227,7 @@ public class Block {
     boardXPos--;
     updateGhostBlock();
     updateTilePos();
+    lastMove = LAST_MOVE_LEFT;
     return true;
   }
   boolean tryMoveRight(){
@@ -185,6 +239,7 @@ public class Block {
     boardXPos++;
     updateGhostBlock();
     updateTilePos();
+    lastMove = LAST_MOVE_RIGHT;
     return true;
   }
   int hardDrop(){
@@ -230,6 +285,7 @@ public class Block {
     rot = newRot;
     boardXPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][0];
     boardYPos += wallKickOffsets[wallKickType][rotIndex][workingWallKick][1];
+    lastMove = LAST_MOVE_ROTATE+rotIndex+"W"+workingWallKick;
     updateGhostBlock();
     updateTilePos();
   }

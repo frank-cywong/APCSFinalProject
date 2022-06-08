@@ -22,7 +22,8 @@ public class Board {
   boolean garbageEnabled = true;
   boolean ghostBlocksEnabled = true;
   float levelScoreMultiplier = 1;
-  final int[] scoresByLineCount = new int[]{100, 300, 600, 800};
+  // indexes: [tspin][linecount] (-1000 means impossible to achieve), based on https://tetris.wiki/Scoring#Recent_guideline_compatible_games
+  final int[][] scoresByTSpinAndLineCount = new int[][]{{0, 100, 300, 500, 800}, {100, 200, 400, -1000, -1000}, {400, 800, 1200, 1600, -1000}};
   int score = 0;
   static final int scorePerHardDropLine = 2;
   boolean stopped = false;
@@ -194,10 +195,12 @@ public class Board {
         rowsToClear.add(row);
       }
     }
+    int tSpinStatus = curBlock.checkTSpinStatus();
+    //System.out.println("TSPINSTATUS: " + tSpinStatus);
+    score += levelScoreMultiplier * scoresByTSpinAndLineCount[tSpinStatus][rowsToClear.size()];
     if(rowsToClear.size() == 0){
       return;
     }
-    score += levelScoreMultiplier * scoresByLineCount[rowsToClear.size() - 1];
     //System.out.println(rowsToClear);
     int[] rowsClearedBelow = new int[boardHeight + 5]; // ie. move this row down by x amount
     int moveDownBy = 0;
@@ -241,8 +244,7 @@ public class Board {
     else if(rowsToClear.size()==4){
       Game.clear4.play();
     }
-    
-    parent.sendGarbage(garbageAmountByLinesCleared[rowsToClear.size() - 1], this);
+    parent.sendGarbage(garbageAmountByTSpinAndLinesCleared[tSpinStatus][rowsToClear.size()], this);
   }
   void generateNewBlock(){ // generates new block
     if(upcomingBlocks.size() <= 1){ // make new blocks first
