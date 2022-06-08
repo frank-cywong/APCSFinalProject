@@ -19,7 +19,7 @@ static final String SCREENTYPE_PAUSE = "PAUSESCREEN";
 static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
 static final String SCREENTYPE_MULTIGAME = "MULTIGAMESCREEN";
-static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN"; // TODO
+static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN";
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
