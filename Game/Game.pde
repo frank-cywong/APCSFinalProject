@@ -1,4 +1,5 @@
 import processing.sound.*;
+static SoundFile file;
 static final int TILE_SIZE = 32;
 
 static final int MOVE_LEFT = 0;
@@ -78,6 +79,7 @@ void setup(){
   ghostTexture = localDataLoader.loadTextureFromFile("textures/ghostDefault.texture");
   changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
+  file = new SoundFile(this,"se_game_double.wav");
   surface.setResizable(true);
 }
 void draw(){

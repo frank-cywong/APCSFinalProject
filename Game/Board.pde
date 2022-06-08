@@ -232,6 +232,7 @@ public class Board {
         tiles[row][col] = null;
       }
     }
+    Game.file.play();
     parent.sendGarbage(garbageAmountByLinesCleared[rowsToClear.size() - 1], this);
   }
   void generateNewBlock(){ // generates new block
