@@ -57,10 +57,14 @@ static final int DAS_NO_KEY_PRESSED = 0;
 static final int DAS_MOVE_LEFT = 1;
 static final int DAS_MOVE_RIGHT = 2;
 
-static final int[] garbageAmountByLinesCleared = {0, 1, 2, 4};
+static final int[][] garbageAmountByTSpinAndLinesCleared = {{0, 0, 1, 2, 4}, {0, 0, 1, 0, 0}, {0, 2, 4, 6, 0}}; // based on https://tetris.wiki/Garbage
 
 static final int BASE_WIDTH = 640;
 static final int BASE_HEIGHT = 720;
+
+static final int TSPIN_NONE = 0; // following definitions on https://tetris.wiki/T-Spin
+static final int TSPIN_MINI = 1;
+static final int TSPIN_FULL = 2;
 
 Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
