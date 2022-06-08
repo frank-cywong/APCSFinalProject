@@ -128,3 +128,8 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Add ghost block functionality and pre-game config to enable/disable it
 	- Nicholas:
 		- FILL THIS IN
+- June 7, 2022 (Tuesday)
+	- Frank:
+		- Fix bug with multiplayer scoring
+	- Nicholas:
+		- FILL THIS IN
