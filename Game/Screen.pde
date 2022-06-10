@@ -216,6 +216,8 @@ public class Screen {
         text("Start New Game", width / 2, height * 0.625 - 20);
         text("Settings", width / 2, height * 0.875 - 20);
         break;
+      case SCREENTYPE_SETUP:
+        
       case SCREENTYPE_SETTINGS:
         String curTextureString = parent.loadConfig(TEXTURE_PACK_CONFIG);
         // ignore file path
@@ -298,6 +300,10 @@ public class Screen {
           parent.changeScreen(SCREENTYPE_MAINMENU);
           return;
         }
+        if (keyCode == CONTROL){
+          parent.changeScreen(SCREENTYPE_SETUP);
+          return;
+        }
         break;
       case SCREENTYPE_SETTINGS:
         if(keyCode == ESC){ // return to main menu
@@ -314,6 +320,7 @@ public class Screen {
         }
         break;
     }
+    
   }
   void onKeyReleased(int keyCode){
     if (hasBoards){
