@@ -1,7 +1,14 @@
 import processing.sound.*;
-static SoundFile clear12;
+static SoundFile clear1;
+static SoundFile clear2;
 static SoundFile clear3;
 static SoundFile clear4;
+static SoundFile rotate;
+static SoundFile hardDrop;
+static SoundFile pause;
+static SoundFile hold;
+static SoundFile move;
+
 static final int TILE_SIZE = 32;
 
 static final int MOVE_LEFT = 0;
@@ -23,6 +30,7 @@ static final String SCREENTYPE_MAINMENU = "MAINMENUSCREEN";
 static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
 static final String SCREENTYPE_MULTIGAME = "MULTIGAMESCREEN";
 static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN";
+static final String SCREENTYPE_SETUP = "SETUPSCREEN";
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
@@ -85,9 +93,18 @@ void setup(){
   ghostTexture = localDataLoader.loadTextureFromFile("textures/ghostDefault.texture");
   changeScreen(SCREENTYPE_MAINMENU);
   size(640, 720);
-  clear12 = new SoundFile(this,"se_game_double.wav");
+  clear1 = new SoundFile(this,"se_game_single.wav");
+  clear3 = new SoundFile(this,"se_game_triple.wav");
+  clear2 = new SoundFile(this,"se_game_double.wav");
   clear3 = new SoundFile(this,"se_game_triple.wav");
   clear4 = new SoundFile(this,"se_game_tetris.wav");
+  hardDrop = new SoundFile(this,"se_game_harddrop.wav");
+  hold = new SoundFile(this,"se_game_hold.wav");
+  pause = new SoundFile(this,"se_game_pause.wav");
+  rotate = new SoundFile(this,"se_game_rotate.wav");
+  move = new SoundFile(this,"se_game_move.wav");
+
+
   surface.setResizable(true);
 }
 void draw(){

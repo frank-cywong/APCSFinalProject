@@ -224,6 +224,7 @@ public class Block {
         return false;
       }
     }
+    Game.move.play();
     boardXPos--;
     updateGhostBlock();
     updateTilePos();
@@ -236,6 +237,7 @@ public class Block {
         return false;
       }
     }
+    Game.move.play();
     boardXPos++;
     updateGhostBlock();
     updateTilePos();
@@ -244,7 +246,12 @@ public class Block {
   }
   int hardDrop(){
     int rows = 0;
-    while(doGravity()){rows++;};
+    while(doGravity()){
+      if(rows==0){
+        Game.hardDrop.play();
+      }
+      rows++;
+    }
     return rows;
   }
   // returns p3 = p1 + p2, where all points are 2d arrays
@@ -288,5 +295,6 @@ public class Block {
     lastMove = LAST_MOVE_ROTATE+rotIndex+"W"+workingWallKick;
     updateGhostBlock();
     updateTilePos();
+    Game.rotate.play();
   }
 }

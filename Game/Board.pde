@@ -235,8 +235,11 @@ public class Board {
         tiles[row][col] = null;
       }
     }
-    if (rowsToClear.size()<=2){
-      Game.clear12.play();
+    if (rowsToClear.size()<2){
+      Game.clear1.play();
+    }
+    if (rowsToClear.size()<3){
+      Game.clear2.play();
     }
     else if (rowsToClear.size()<4){
       Game.clear3.play();
@@ -269,6 +272,7 @@ public class Board {
     if(!heldBlockEnabled || heldBlockUsed){ // can't hold block
       return;
     }
+    Game.hold.play();
     heldBlockUsed = true;
     Block temp = heldBlock;
     heldBlock = curBlock;
@@ -402,10 +406,12 @@ public class Board {
     }
     if(keyCode == controls[HOLD_PIECE]){
       tryHoldBlock();
+      
       return;
     }
     if(keyCode == ESC){
       parent.stopAllBoards();
+      Game.pause.play();
       parent.parent.changeScreen(SCREENTYPE_PAUSE, new Object[]{parent}); // pass screen itself as argument
     }
   }
