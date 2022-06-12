@@ -3,6 +3,7 @@ public class Block {
   int boardYPos = BLOCK_START_Y_POS;
   Board parent;
   Block ghostBlock;
+  boolean canMove = true;
   boolean boardDoesRendering = true;
   int rawXPos = 0; // used only if boardDoesRendering is false, represents top left corner of "center"
   int rawYPos = 0;
@@ -219,6 +220,7 @@ public class Block {
     ghostBlock = null;
   }
   boolean tryMoveLeft(){
+    if(!this.canMove) return false;
     for(Tile t : tiles){
       if(!t.canMoveTo(-1,0)){
         return false;
@@ -232,6 +234,7 @@ public class Block {
     return true;
   }
   boolean tryMoveRight(){
+    if(!this.canMove) return false;
     for(Tile t : tiles){
       if(!t.canMoveTo(1,0)){
         return false;
@@ -269,6 +272,7 @@ public class Block {
     return o;
   }
   void rotateBlock(boolean clockwise){
+    if(!this.canMove) return;
     int newRot = (clockwise ? (rot + 1) % 4 : (rot + 3) % 4); // +3 same as -1 but no negatives
     int rotIndex = (rot << 1) | (clockwise ? 0 : 1);
     int wallKickType = wallKickPieceTypes[curr];
