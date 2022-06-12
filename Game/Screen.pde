@@ -137,10 +137,8 @@ public class Screen {
         break;
       case SCREENTYPE_NEWGAME:
         noStroke();
-        fill(0xFF606060);
-        rect(0, 0, width, height);
+        image(background,0,0,width,height);
         textAlign(LEFT, CENTER);
-        fill(255);
         textSize(24);
         text("Player Count:", 30, 40);
         text("Gravity (1 line / x frames):", 30, 80);
@@ -208,9 +206,7 @@ public class Screen {
         break;
       case SCREENTYPE_MAINMENU:
         noStroke();
-        fill(0xFF606060);
-        rect(0, 0, width, height);
-        fill(255);
+        image(background,0,0,width,height);
         textAlign(CENTER, CENTER);
         textSize(128);
         text("TETRIS", width / 2, height / 4);
@@ -232,9 +228,7 @@ public class Screen {
           curTextureString = curTextureString.substring(cutOffPoint + 1);
         }
         noStroke();
-        fill(0xFF606060);
-        rect(0, 0, width, height);
-        fill(255);
+        image(background,0,0,width,height);
         textSize(24);
         textAlign(LEFT, CENTER);
         text("Current Texture:\n" + curTextureString, 30, 58);
