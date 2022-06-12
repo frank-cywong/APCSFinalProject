@@ -402,6 +402,7 @@ public class Board {
     }
     if(keyCode == controls[HARD_DROP]){
       score += scorePerHardDropLine * curBlock.hardDrop();
+      curBlock.canMove=false;
       return;
     }
     if(keyCode == controls[HOLD_PIECE]){
