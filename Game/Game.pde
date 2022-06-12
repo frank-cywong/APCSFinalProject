@@ -8,6 +8,7 @@ static SoundFile hardDrop;
 static SoundFile pause;
 static SoundFile hold;
 static SoundFile move;
+static PImage background;
 
 static final int TILE_SIZE = 32;
 
@@ -103,6 +104,7 @@ void setup(){
   pause = new SoundFile(this,"se_game_pause.wav");
   rotate = new SoundFile(this,"se_game_rotate.wav");
   move = new SoundFile(this,"se_game_move.wav");
+  background = loadImage("background.jpg");
 
 
   surface.setResizable(true);
