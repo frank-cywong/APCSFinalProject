@@ -139,6 +139,7 @@ public class Board {
   }
   void endGame(){
     parent.stopAllBoards();
+    Game.gameOver.play();
     parent.parent.changeScreen(SCREENTYPE_END, (new Object[]{score, false, parent}));
   }
   void fixBlockInPlace(){ // "deletes" this block and locks the tiles on the board after a delay
@@ -396,6 +397,7 @@ public class Board {
     }
     if(keyCode == controls[SOFT_DROP]){
       if(!isSoftDropping){
+        Game.softDrop.play();
         isSoftDropping = true;
         gravityRate = originalGravityRate / 10;
       }

@@ -8,6 +8,9 @@ static SoundFile hardDrop;
 static SoundFile pause;
 static SoundFile hold;
 static SoundFile move;
+static SoundFile gameOver;
+static SoundFile softDrop;
+
 static PImage background;
 
 static final int TILE_SIZE = 32;
@@ -104,6 +107,9 @@ void setup(){
   pause = new SoundFile(this,"se_game_pause.wav");
   rotate = new SoundFile(this,"se_game_rotate.wav");
   move = new SoundFile(this,"se_game_move.wav");
+  gameOver = new SoundFile(this,"me_game_gameover.wav");
+  softDrop = new SoundFile(this,"se_game_softdrop.wav");
+  
   background = loadImage("background.jpg");
 
 
