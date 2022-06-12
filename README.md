@@ -133,3 +133,28 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Fix bug with multiplayer scoring
 	- Nicholas:
 		- FILL THIS IN
+- June 8, 2022 (Wednesday)
+	- Frank:
+		- Allow hold block to be disabled for a game
+	- Nicholas:
+		- FILL THIS IN
+- June 9, 2022
+	- Frank:
+		- NA
+	- Nicholas:
+		- FILL THIS IN
+- June 10, 2022 (Friday)
+	- Frank:
+		- T-spins now give you extra points and garbage
+	- NIcholas:
+		- FILL THIS IN
+- June 11, 2022 (Saturday)
+	- Frank:
+		- NA
+	- Nicholas:
+		- FILL THIS IN
+- June 12, 2022 (Sunday)
+	- Frank:
+		- TBD
+	- Nicholas
+		- TBD
