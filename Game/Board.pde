@@ -46,10 +46,18 @@ public class Board {
   boolean isSoftDropping = false;
   int highScore = 0;
   Mod mod;
-  public Board(Screen parent, int topLeftX, int topLeftY, Mod mod) {
+  public Board(Screen parent, int topLeftX, int topLeftY, Mod mod){
+    this(parent, topLeftX, topLeftY, mod, false);
+  }
+  public Board(Screen parent, int topLeftX, int topLeftY, Mod mod, boolean stopped) {
     this.parent = parent;
     this.topLeftX = topLeftX;
     this.topLeftY = topLeftY;
+    this.mod = mod;
+    if(mod != null){
+      mod.onModMount(this);
+    }
+    this.stopped = stopped;
     tiles = new Tile[boardHeight + 20][boardWidth]; // 0th row is bottom etc. 20 hidden rows to allow for drop & garbage space
     generateNewBlock();
     // default controls, A for left, D for right, Q for CCW, E for CW, Z for hard drop, X for soft drop, C for hold
@@ -57,7 +65,7 @@ public class Board {
     controls = new int[] {(int)'A', (int)'D', (int)'Q', (int)'E', (int)'Z', (int)'X', (int)'C'};
     String tempHighScore = parent.parent.loadConfig(HIGHSCORE_DATA_CONFIG);
     highScore = (tempHighScore == null ? 0 : Integer.parseInt(tempHighScore));
-    System.out.println(mod == null ? "NA" : mod.returnDisplayName());
+    //System.out.println(mod == null ? "NA" : mod.returnDisplayName());
   }
   void render() {
     if(stopped){
@@ -255,14 +263,23 @@ public class Board {
     parent.sendGarbage(garbageAmountByTSpinAndLinesCleared[tSpinStatus][rowsToClear.size()], this);
   }
   void generateNewBlock(){ // generates new block
-    if(mod != null){
-    }
     if(upcomingBlocks.size() <= 1){ // make new blocks first
-      ArrayList<Integer> toAdd = new ArrayList<Integer>(Block.BLOCK_TYPE_COUNT);
-      for(int i = 0; i < Block.BLOCK_TYPE_COUNT; i++){
-        toAdd.add(i);
+      boolean overrideDefault = false;
+      ArrayList<Integer> toAdd = null;
+      if(mod != null){
+        boolean isImmediate = (upcomingBlocks.size() == 0);
+        toAdd = mod.generateNewBlock(tiles, isImmediate);
+        if(toAdd != null && (!isImmediate || toAdd.size() > 0)){ // use default gen if null or invalid
+          overrideDefault = true;
+        }
       }
-      Collections.shuffle(toAdd);
+      if(!overrideDefault){
+        toAdd = new ArrayList<Integer>(Block.BLOCK_TYPE_COUNT);
+        for(int i = 0; i < Block.BLOCK_TYPE_COUNT; i++){
+          toAdd.add(i);
+        }
+        Collections.shuffle(toAdd);
+      }
       for(int blockType : toAdd){
         upcomingBlocks.add(blockType);
       }
