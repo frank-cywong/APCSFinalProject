@@ -159,7 +159,12 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Added debouncing to rotation to prevent spamming rotate by holding down rotate
 		- Fixed a bug where ghost blocks could override the main block in some cases
 		- Added basic version of evil tetris implementation which gives you the worst block, defined as the block that would result in the greatest height, each turn
-	- Nicholas
+	- Nicholas:
 		- Fixed some bugs with evil tetris
 		- Created board layouts that highlight the t spin and the tetris
 		- Deleted some outdated class files
+- June 13, 2022 (Monday)
+	- Frank:
+		- Fix bug with evil tetris audio
+	-Nicholas:
+		- NA

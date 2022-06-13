@@ -45,7 +45,7 @@ public class EvilTetris implements Mod {
           }
           testBoard.curBlock.updateTilePos();
           //System.out.println(Arrays.deepToString(testBoard.tiles));
-          testBoard.curBlock.hardDrop();
+          testBoard.curBlock.hardDrop(false);
           int curHeight = 0;
           for(int row = 0; row <= bestPossibleHeight; row++){
             boolean hasTileInRow = false;
