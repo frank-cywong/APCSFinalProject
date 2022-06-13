@@ -15,18 +15,24 @@ public class Screen {
     this.parent = parent;
     this.args = args;
     boards = new Board[1];
-    boards[0] = new Board(this, 0, 0);
+    boards[0] = new Board(this, 0, 0, null);
     if(screentype == SCREENTYPE_GAME){
       hasBoards = true;
       boards = new Board[1];
-      boards[0] = new Board(this, 0, 0);
+      if(args.length == 0){
+        args = new Object[]{null};
+      }
+      boards[0] = new Board(this, 0, 0, (Mod)args[0]);
       updateBoardControls();
     }
     if(screentype == SCREENTYPE_MULTIGAME){
       hasBoards = true;
       boards = new Board[2];
-      boards[0] = new Board(this, 0, 0);
-      boards[1] = new Board(this, Board.gameplayXOffset * 2 + boards[0].boardWidth * TILE_SIZE + Board.statZoneWidth, 0);
+      if(args.length == 0){
+        args = new Object[]{null};
+      }
+      boards[0] = new Board(this, 0, 0, (Mod)args[0]);
+      boards[1] = new Board(this, Board.gameplayXOffset * 2 + boards[0].boardWidth * TILE_SIZE + Board.statZoneWidth, 0, (Mod)args[0]);
       updateBoardControls();
     }
     switch(screentype){
@@ -63,11 +69,11 @@ public class Screen {
           throw new IllegalArgumentException("Pause screen must have old game screen passed into it as argument");
         }
         break;
-      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames, amount to change delta G by every time its increased, minimum gravity, ghost block enabled, held block enabled, garbage enabled])
+      case SCREENTYPE_NEWGAME: // no arguments, but args used to store args for game as a temp storage ([gravity (in 1 tile / x frames), playercount, fix block delay, decrease gravity every n frames, amount to change delta G by every time its increased, minimum gravity, ghost block enabled, held block enabled, garbage enabled, index of cur mod])
         noStroke();
         fill(0xFF606060);
         rect(0, 0, width, height); //  // entirely fill screen
-        this.args = new Object[]{30, 1, 30, 600, 40, 1, true, true, true};
+        this.args = new Object[]{30, 1, 30, 600, 40, 1, true, true, true, 0};
         break;
       case SCREENTYPE_MAINMENU: // no arguments at all
         noStroke();
@@ -149,45 +155,16 @@ public class Screen {
         text("Ghost Blocks:", 30, 280);
         text("Hold Block:", 30, 320);
         text("[MULTIPLAYER] Garbage:", 30, 360);
+        text("Mod:", 30, 400);
         textAlign(CENTER, CENTER);
-        fill(#CC4449);
-        rect(width - 60, 30, 30, 30);
-        rect(width - 60, 70, 30, 30);
-        rect(width - 60, 110, 30, 30);
-        rect(width - 60, 150, 30, 30);
-        rect(width - 60, 190, 30, 30);
-        rect(width - 60, 230, 30, 30);
-        rect(width - 60, 270, 30, 30);
-        rect(width - 60, 310, 30, 30);
-        rect(width - 60, 350, 30, 30);
-        rect(width - 150, 30, 30, 30);
-        rect(width - 150, 70, 30, 30);
-        rect(width - 150, 110, 30, 30);
-        rect(width - 150, 150, 30, 30);
-        rect(width - 150, 190, 30, 30);
-        rect(width - 150, 230, 30, 30);
-        rect(width - 150, 270, 30, 30);
-        rect(width - 150, 310, 30, 30);
-        rect(width - 150, 350, 30, 30);
-        fill(255);
-        text(">", width - 45, 40);
-        text(">", width - 45, 80);
-        text(">", width - 45, 120);
-        text(">", width - 45, 160);
-        text(">", width - 45, 200);
-        text(">", width - 45, 240);
-        text(">", width - 45, 280);
-        text(">", width - 45, 320);
-        text(">", width - 45, 360);
-        text("<", width - 135, 40);
-        text("<", width - 135, 80);
-        text("<", width - 135, 120);
-        text("<", width - 135, 160);
-        text("<", width - 135, 200);
-        text("<", width - 135, 240);
-        text("<", width - 135, 280);
-        text("<", width - 135, 320);
-        text("<", width - 135, 360);
+        for(int tempYCor = 40; tempYCor <= 400; tempYCor += 40){
+          fill(#CC4449);
+          rect(width - 60, tempYCor - 10, 30, 30);
+          rect(width - 150, tempYCor - 10, 30, 30);
+          fill(255);
+          text("<", width - 135, tempYCor);
+          text(">", width - 45, tempYCor);
+        }
         text(args[1].toString(), width - 90, 40);
         text(args[0].toString(), width - 90, 80);
         text(args[2].toString(), width - 90, 120);
@@ -197,6 +174,7 @@ public class Screen {
         text((boolean)args[6] ? "On" : "Off", width - 90, 280);
         text((boolean)args[7] ? "On" : "Off", width - 90, 320);
         text((boolean)args[8] ? "On" : "Off", width - 90, 360);
+        text(availableMods[(int)args[9]] == null ? "None" : availableMods[(int)args[9]].returnDisplayName(), width - 90, 400);
         textAlign(CENTER, CENTER);
         fill(#CC4449);
         rect(30, height - 85, width - 60, 70);
@@ -413,8 +391,8 @@ public class Screen {
         break;
       case SCREENTYPE_NEWGAME:
         if(isInRange(mouseX, 30, width - 30) && isInRange(mouseY, height - 85, height - 15)){ // start game button
-          if((int)args[1]==1)parent.changeScreen(SCREENTYPE_GAME);
-          if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME); //This is annoying, will do later
+          if((int)args[1]==1)parent.changeScreen(SCREENTYPE_GAME, new Object[]{availableMods[(int)args[9]]});
+          if((int)args[1]==2)parent.changeScreen(SCREENTYPE_MULTIGAME, new Object[]{availableMods[(int)args[9]]});
           parent.curScreen.setBoardGravity((int)args[0]);
           parent.curScreen.setBoardBlockFixDelay((int)args[2]);
           parent.curScreen.setDeltaG((int)args[3]);
@@ -548,6 +526,23 @@ public class Screen {
           boolean curHoldBlockEnabled = (boolean)args[7];
           curHoldBlockEnabled = !curHoldBlockEnabled;
           args[7] = (Object)curHoldBlockEnabled;
+        }
+        if(isInRange(mouseX, width - 150, width - 120) && isInRange(mouseY, 400, 430)){ // decrease mod index
+          int curModIndex = (int)args[9];
+          curModIndex--;
+          if(curModIndex < 0){
+            curModIndex = availableMods.length - 1;
+          }
+          args[9] = (Object)curModIndex;
+          //System.out.println("test");
+        }
+        if(isInRange(mouseX, width - 60, width - 30) && isInRange(mouseY, 400, 430)){ // increase mod index
+          int curModIndex = (int)args[9];
+          curModIndex++;
+          if(curModIndex > availableMods.length - 1){
+            curModIndex = 0;
+          }
+          args[9] = (Object)curModIndex;
         }
         break;
       case SCREENTYPE_MAINMENU:
