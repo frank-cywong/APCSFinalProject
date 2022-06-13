@@ -85,6 +85,8 @@ Screen curScreen;
 private HashMap<String, String> config; // use config getter / setter methods
 DataLoader localDataLoader = new DataLoader();
 
+Mod[] availableMods = {null, new EvilTetris()};
+
 byte[] tileTexture;
 byte[] ghostTexture;
 
