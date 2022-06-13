@@ -16,7 +16,7 @@ public class Screen {
     this.args = args;
     boards = new Board[1];
     boards[0] = new Board(this, 0, 0, null);
-    if(screentype == SCREENTYPE_GAME){
+    if(screentype == SCREENTYPE_GAME||screentype==SCREENTYPE_TETRIS||screentype==SCREENTYPE_TSPIN){
       hasBoards = true;
       boards = new Board[1];
       if(args == null || args.length == 0){
@@ -568,10 +568,12 @@ public class Screen {
           parent.changeScreen(SCREENTYPE_SETTINGS);
           //delay(1000);
         }
+        /*
         if(isInRange(mouseX, width * 0.8, width * 0.9) && isInRange(mouseY, height * 0.1, height * 0.2)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETUP);
           //delay(1000);
         }
+        */
         break;
       case SCREENTYPE_SETUP:
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
