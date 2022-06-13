@@ -60,6 +60,9 @@ public class Tile {
       return; // do nothing
     }
     if(newBoardXPos == boardXPos && newBoardYPos == boardYPos){
+      if(!noOverRender && parent.tiles[boardYPos][boardXPos] != this){
+        parent.tiles[boardYPos][boardXPos] = this;
+      }
       return; // no change
     }
     if(newBoardXPos < 0 || newBoardYPos < 0 || newBoardYPos >= parent.tiles.length || newBoardXPos >= parent.tiles[newBoardYPos].length){
@@ -72,6 +75,7 @@ public class Tile {
     boardYPos = newBoardYPos;
     if(!noOverRender){
       parent.tiles[boardYPos][boardXPos] = this;
+      //System.out.println("Setting tile at: (" + boardXPos + ", " + boardYPos + ")");
     }
   }
   public int getBoardXPos(){ // if boardXPos and boardYPos are modified erroneously its very bad, hence getter & setter methods
