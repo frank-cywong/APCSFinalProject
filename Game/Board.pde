@@ -98,7 +98,12 @@ public class Board {
         heldBlock.render();
       }
     }
-    nextBlockIcon.render();
+    if(nextBlockIcon != null){
+      nextBlockIcon.render();
+    } else {
+      textSize(48);
+      text("?", topLeftX + gameplayXOffset * 2 + boardWidth * TILE_SIZE + 50, topLeftY + gameplayYOffset + 40);
+    }
     curBlock.render();
     for(int i = 0; i < boardWidth; i++){
       for(int j = 0; j < boardHeight; j++){
@@ -288,7 +293,11 @@ public class Board {
     if(ghostBlocksEnabled){
       curBlock.createGhostBlock();
     }
-    nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
+    if(upcomingBlocks.size() >= 1){
+      nextBlockIcon = new Block(this, upcomingBlocks.peek(), topLeftX + gameplayXOffset * 2 + (boardWidth + 1) * TILE_SIZE, topLeftY + gameplayYOffset + TILE_SIZE + 40);
+    } else {
+      nextBlockIcon = null;
+    }
     //System.out.println(nextBlockIcon.rawXPos);
     //System.out.println(topLeftX);
   }
