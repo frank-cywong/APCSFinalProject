@@ -102,61 +102,64 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Make a settings menu that allows textures & keybindings to be customised in-game
 		- Update README.md's compile and run instructions
 	- Nicholas:
-		- FILL THIS IN
+		- Cleaned up some older code
 - June 2, 2022 (Thursday)
 	- Frank:
 		- Make gravity increase over time and allow for more complex gravity changes over time
 	- Nicholas:
-		- FILL THIS IN
+		- Worked on the UML Diagram
 - June 3, 2022 (Friday)
 	- Frank:
 		- Add garbage mechanism for multiplayer games
 	- Nicholas:
-		- FILL THIS IN
+		- Downloaded the processing sound library and found some sounds online
 - June 4, 2022 (Saturday)
 	- Frank:
 		- NA
 	- Nicholas:
-		- FILL THIS IN
+		- Realized that those sounds weren't usable, and neither were custom made sounds
 - June 5, 2022 (Sunday)
 	- Frank:
 		- NA
 	- Nicholas:
-		- FILL THIS IN
+		- NA
 - June 6, 2022 (Monday)
 	- Frank:
 		- Add ghost block functionality and pre-game config to enable/disable it
 	- Nicholas:
-		- FILL THIS IN
+		- Found some bugs with how the ghost blocks and garbage interacted
 - June 7, 2022 (Tuesday)
 	- Frank:
 		- Fix bug with multiplayer scoring
 	- Nicholas:
-		- FILL THIS IN
+		- Downloaded all of the sounds used in the Nintendo Switch Tetris 99 version
 - June 8, 2022 (Wednesday)
 	- Frank:
 		- Allow hold block to be disabled for a game
 	- Nicholas:
-		- FILL THIS IN
+		- Added some other important sounds I forgot about
 - June 9, 2022
 	- Frank:
 		- NA
 	- Nicholas:
-		- FILL THIS IN
+		- Created a new setup class for potential cheats
 - June 10, 2022 (Friday)
 	- Frank:
 		- T-spins now give you extra points and garbage
 	- NIcholas:
-		- FILL THIS IN
+		- Updated the UML Diagram
 - June 11, 2022 (Saturday)
 	- Frank:
 		- NA
 	- Nicholas:
-		- FILL THIS IN
+		- Added a new background
+		- Fixed a bug where pieces could still move after being hard dropped
 - June 12, 2022 (Sunday)
 	- Frank:
 		- Added debouncing to rotation to prevent spamming rotate by holding down rotate
 		- Fixed a bug where ghost blocks could override the main block in some cases
 		- Added basic version of evil tetris implementation which gives you the worst block, defined as the block that would result in the greatest height, each turn
 	- Nicholas
-		- TBD
+		- Fixed some bugs with evil tetris
+		- Created board layouts that highlight the t spin and the tetris
+		- Deleted some outdated class files
