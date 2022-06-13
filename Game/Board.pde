@@ -19,6 +19,8 @@ public class Board {
   int DASTickCounter = 0;
   int DASKeyPressed = 0;
   boolean DASKeyRepeated = false; // has the das key pressed entered the "key repeat" stage
+  boolean CCWRotPressed = false;
+  boolean CWRotPressed = false;
   boolean garbageEnabled = true;
   boolean ghostBlocksEnabled = true;
   float levelScoreMultiplier = 1;
@@ -388,10 +390,18 @@ public class Board {
       return;
     }
     if(keyCode == controls[ROTATE_CCW]){
+      if(CCWRotPressed){
+        return;
+      }
+      CCWRotPressed = true;
       curBlock.rotateBlock(false);
       return;
     }
     if(keyCode == controls[ROTATE_CW]){
+      if(CWRotPressed){
+        return;
+      }
+      CWRotPressed = true;
       curBlock.rotateBlock(true);
       return;
     }
@@ -425,6 +435,14 @@ public class Board {
     }
     if(keyCode == controls[MOVE_RIGHT]){
       DASKeyRelease(DAS_MOVE_RIGHT);
+      return;
+    }
+    if(keyCode == controls[ROTATE_CCW]){
+      CCWRotPressed = false;
+      return;
+    }
+    if(keyCode == controls[ROTATE_CW]){
+      CWRotPressed = false;
       return;
     }
     if(keyCode == controls[SOFT_DROP]){
