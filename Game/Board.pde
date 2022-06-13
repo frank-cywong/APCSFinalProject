@@ -74,16 +74,62 @@ public class Board {
       }
       curBlock.boardYPos += 4;
       curBlock.updateTilePos();
-      for(int row = 4 - 1; row >= 0; row--){ // new garbage rows
+      for(int row = 4 - 1; row >= 0; row--){ 
         for(int col = 0; col < tiles[row].length-1; col++){
           Tile t = new Tile(this);
           t.c = #808080;
           t.updateBoardPos(col, row);
-          tiles[row][col] = t; // just in case
+          tiles[row][col] = t; 
           t.updateTexture();
         }
       }
     }
+    if (parent.screentype.equals(SCREENTYPE_TSPIN)){
+      boolean[][] check = new boolean[tiles.length][tiles[0].length];
+      for(int row=0;row<tiles.length;row++){
+        for(int col = 0; col<tiles[row].length;col++){
+          check[row][col]=false;
+        }
+      }
+      
+      for(int row = tiles.length - 1; row >= 2; row--){
+        for(int col = 0; col < tiles[0].length-4; col++){
+          tiles[row][col] = tiles[row - 2][col];
+          check[row][col]=true;
+        }
+      }
+      for(int row = tiles.length - 1; row >= 1; row--){       
+        tiles[row][6] = tiles[row - 1][6];
+        check[row][6]=true;
+      }
+      for(int row = tiles.length-1; row >= 0; row--){       
+        check[row][7]=true;
+      }
+      for(int row = tiles.length - 1; row >= 3; row--){
+        tiles[row][8] = tiles[row - 3][8];
+        check[row][8]=true;
+      }
+      check[1][8]=true;
+      for(int row = tiles.length - 1; row >= 3; row--){
+        tiles[row][9] = tiles[row - 3][9];
+        check[row][9]=true;
+      }
+      
+      curBlock.boardYPos += 2;
+      curBlock.updateTilePos();
+      for(int row = tiles.length - 1; row >= 0; row--){ 
+        for(int col = 0; col < tiles[row].length; col++){
+          if (!check[row][col]){
+            Tile t = new Tile(this);
+            t.c = #808080;
+            t.updateBoardPos(col, row);
+            tiles[row][col] = t; 
+            t.updateTexture();
+          }
+        }
+      }
+    }
+    
     //System.out.println(mod == null ? "NA" : mod.returnDisplayName());
   }
   void render() {
