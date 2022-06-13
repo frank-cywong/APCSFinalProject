@@ -378,9 +378,9 @@ public class Screen {
           } else { // then assume args 2 is a valid screen
             Screen copySettingsFrom = (Screen)(args[2]);
             if(copySettingsFrom.boards.length >= 2){
-              parent.changeScreen(SCREENTYPE_MULTIGAME); 
+              parent.changeScreen(SCREENTYPE_MULTIGAME, new Object[]{copySettingsFrom.boards[0].mod}); 
             } else {
-              parent.changeScreen(SCREENTYPE_GAME);
+              parent.changeScreen(SCREENTYPE_GAME, new Object[]{copySettingsFrom.boards[0].mod});
             }
             parent.curScreen.setBoardGravity(copySettingsFrom.boards[0].startGravityRate);
             parent.curScreen.setBoardBlockFixDelay(copySettingsFrom.boards[0].fixBlockDelay);
