@@ -163,6 +163,7 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 		- Fixed some bugs with evil tetris
 		- Created board layouts that highlight the t spin and the tetris
 		- Deleted some outdated class files
+		- Made a fake button that DOES NOT WORK on the main screen to the secrets menu, for the actual menu, use control on the start game menu
 - June 13, 2022 (Monday)
 	- Frank:
 		- Fix bug with evil tetris audio
