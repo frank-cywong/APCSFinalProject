@@ -167,5 +167,6 @@ To make custom textures from image files, look at `/tools/ImageToTexture/Guide_T
 - June 13, 2022 (Monday)
 	- Frank:
 		- Fix bug with evil tetris audio
+		- Fix bug where game mods do not persist after restart game with same settings button
 	- Nicholas:
 		- NA
