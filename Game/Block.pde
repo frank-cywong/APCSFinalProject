@@ -247,15 +247,18 @@ public class Block {
     lastMove = LAST_MOVE_RIGHT;
     return true;
   }
-  int hardDrop(){
+  int hardDrop(boolean playSound){
     int rows = 0;
     while(doGravity()){
-      if(rows==0){
+      if(playSound && rows==0){
         Game.hardDrop.play();
       }
       rows++;
     }
     return rows;
+  }
+  int hardDrop(){
+    return hardDrop(true);
   }
   // returns p3 = p1 + p2, where all points are 2d arrays
   int[] coordAdd(int[] a, int[] b){
