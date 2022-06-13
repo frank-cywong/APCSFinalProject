@@ -191,12 +191,18 @@ public class Screen {
         fill(#CC4449);
         rect(width * 0.1, height * 0.5, width * 0.8, height * 0.25 - 30);
         rect(width * 0.1, height * 0.75, width * 0.8, height * 0.25 - 30);
+        rect(width*0.8,height*0.1,width*0.1,height*0.1);
         fill(255);
         textSize(48);
         text("Start New Game", width / 2, height * 0.625 - 20);
         text("Settings", width / 2, height * 0.875 - 20);
+        textSize(20);
+        text("Secret",width*0.85,height*0.15);
         break;
       case SCREENTYPE_SETUP:
+        noStroke();
+        image(background,0,0,width,height);
+        break;
         
       case SCREENTYPE_SETTINGS:
         String curTextureString = parent.loadConfig(TEXTURE_PACK_CONFIG);
@@ -552,6 +558,10 @@ public class Screen {
         }
         if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETTINGS);
+          //delay(1000);
+        }
+        if(isInRange(mouseX, width * 0.8, width * 0.9) && isInRange(mouseY, height * 0.1, height * 0.2)){ // settings menu
+          parent.changeScreen(SCREENTYPE_SETUP);
           //delay(1000);
         }
       case SCREENTYPE_SETTINGS:
