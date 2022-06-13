@@ -19,7 +19,7 @@ public class Screen {
     if(screentype == SCREENTYPE_GAME){
       hasBoards = true;
       boards = new Board[1];
-      if(args.length == 0){
+      if(args == null || args.length == 0){
         args = new Object[]{null};
       }
       boards[0] = new Board(this, 0, 0, (Mod)args[0]);
@@ -202,6 +202,14 @@ public class Screen {
       case SCREENTYPE_SETUP:
         noStroke();
         image(background,0,0,width,height);
+        textAlign(CENTER, CENTER);
+        fill(#CC4449);
+        rect(width * 0.1, height * 0.5, width * 0.8, height * 0.25 - 30);
+        rect(width * 0.1, height * 0.75, width * 0.8, height * 0.25 - 30);
+        fill(255);
+        textSize(48);
+        text("Tetris", width / 2, height * 0.625 - 20);
+        text("T-Spin", width / 2, height * 0.875 - 20);
         break;
         
       case SCREENTYPE_SETTINGS:
@@ -562,6 +570,16 @@ public class Screen {
         }
         if(isInRange(mouseX, width * 0.8, width * 0.9) && isInRange(mouseY, height * 0.1, height * 0.2)){ // settings menu
           parent.changeScreen(SCREENTYPE_SETUP);
+          //delay(1000);
+        }
+        break;
+      case SCREENTYPE_SETUP:
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.5, height * 0.75 - 30)){ // start new game
+          parent.changeScreen(SCREENTYPE_TETRIS);
+          //delay(1000);
+        }
+        if(isInRange(mouseX, width * 0.1, width * 0.9) && isInRange(mouseY, height * 0.75, height - 30)){ // settings menu
+          parent.changeScreen(SCREENTYPE_TSPIN);
           //delay(1000);
         }
       case SCREENTYPE_SETTINGS:

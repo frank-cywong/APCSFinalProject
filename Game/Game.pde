@@ -35,6 +35,9 @@ static final String SCREENTYPE_NEWGAME = "NEWGAMESCREEN";
 static final String SCREENTYPE_MULTIGAME = "MULTIGAMESCREEN";
 static final String SCREENTYPE_SETTINGS = "SETTINGSSCREEN";
 static final String SCREENTYPE_SETUP = "SETUPSCREEN";
+static final String SCREENTYPE_TETRIS = "TETRISSCREEN";
+static final String SCREENTYPE_TSPIN = "TSPINSCREEN";
+
 
 static final int BLOCK_START_X_POS = 4;
 static final int BLOCK_START_Y_POS = 20;
